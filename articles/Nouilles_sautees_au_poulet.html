@@ -1,216 +1,176 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Nouilles sautées au poulet (Préparation : 20 min)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nouilles sautées au poulet — Recette</title>
+  <meta name="description" content="Recette rapide de nouilles sautées au poulet (préparation : 20 min). Étapes claires et mise en page soignée, prête à imprimer." />
   <style>
-    body {
-      background: linear-gradient(135deg, #f7cac9 0%, #fff8e1 100%);
-      font-family: 'Segoe UI', 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      color: #2d2926;
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --card:#0b1223;        /* deep card */
+      --text:#e5e7eb;        /* slate-200 */
+      --muted:#94a3b8;       /* slate-400 */
+      --accent:#22d3ee;      /* cyan-400 */
+      --accent-2:#a78bfa;    /* violet-400 */
+      --ring:#38bdf8;        /* sky-400 */
+      --radius:18px;
+      --shadow-lg:0 20px 40px rgba(0,0,0,.35);
     }
-    .container {
-      max-width: 650px;
-      margin: 48px auto 24px auto;
-      background: rgba(255,255,255,0.97);
-      border-radius: 20px;
-      box-shadow: 0 8px 24px rgba(195, 45, 55, 0.12);
-      padding: 32px 22px;
-    }
-    h1 {
-      font-family: 'Segoe UI', 'Arial', sans-serif;
-      font-size: 2em;
-      color: #c32d37;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    h1::after {
-      content: "🍜";
-      font-size: 1.2em;
-    }
-    img {
-      display: block;
-      width: 100%;
-      max-width: 420px;
-      margin: 0 auto 24px auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px #c32d3724;
-      border: 3px solid #c32d37;
-      background: #fff;
-    }
-    #ingredientsCanvas {
-      display: block;
-      margin: 0 auto 32px auto;
-      border-radius: 16px;
-      box-shadow: 0 2px 10px #c32d3720;
-      border: 2px solid #e2a834;
-      background: #fff8e1;
-    }
-    h2 {
-      margin-top: 6px;
-      color: #e2a834;
-      font-size: 1.25em;
-      font-family: 'Segoe UI', 'Arial', sans-serif;
-      letter-spacing: 1px;
-    }
-    ol {
-      background: #fff0e1;
-      border-radius: 12px;
-      padding: 16px 20px;
-      box-shadow: 0 2px 8px #e2a83422;
-      font-size: 1.06em;
-      color: #2d2926;
-    }
-    ol li {
-      margin-bottom: 10px;
-      line-height: 1.7;
-    }
-    @media (max-width: 700px) {
-      .container {
-        max-width: 98vw;
-        padding: 14px 2vw;
-      }
-      img {
-        max-width: 98vw;
-      }
-      #ingredientsCanvas {
-        width: 95vw !important;
-        max-width: 95vw;
-      }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif; color:var(--text); background:linear-gradient(135deg,#0b1223, var(--bg));}
+
+    /* Header */
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(160%) blur(10px);
+      background:linear-gradient(180deg, rgba(2,6,23,.78), rgba(2,6,23,.35)); border-bottom:1px solid rgba(148,163,184,.15)}
+    .wrap{max-width:1024px; margin-inline:auto; padding:16px 20px}
+    .row{display:flex; align-items:center; gap:10px; justify-content:space-between}
+    .breadcrumb{display:flex; align-items:center; gap:8px; color:var(--muted); text-decoration:none}
+    .breadcrumb:hover{color:var(--text)}
+    .actions{display:flex; gap:8px}
+    .btn{appearance:none; border:1px solid rgba(148,163,184,.18); color:var(--text); background:linear-gradient(180deg,#0b1223,#0f172a); padding:8px 12px; border-radius:12px; cursor:pointer; font-weight:500}
+    .btn:hover{border-color:rgba(56,189,248,.45)}
+    .btn:focus-visible{outline:none; box-shadow:0 0 0 3px var(--ring)}
+
+    /* Hero */
+    .hero{position:relative}
+    .hero .imgwrap{position:relative; border-radius:22px; overflow:hidden; border:1px solid rgba(148,163,184,.15); box-shadow:var(--shadow-lg)}
+    .hero img{width:100%; height:360px; object-fit:cover; display:block; background:#111}
+    .hero .overlay{position:absolute; inset:0; background:linear-gradient(180deg, transparent 20%, rgba(2,6,23,.65) 75%, rgba(2,6,23,.9) 100%)}
+    .hero .title{position:absolute; left:22px; bottom:20px; right:22px; display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px}
+    h1{margin:0; font-size:clamp(22px,4.2vw,40px); letter-spacing:.2px}
+    .badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:600; color:#e0fbff}
+
+    /* Layout */
+    .content{display:grid; grid-template-columns: 1fr 300px; gap:22px; margin-top:24px}
+    @media (max-width: 980px){ .content{grid-template-columns: 1fr} }
+
+    .card{background:linear-gradient(135deg,#0b1223,var(--card)); border:1px solid rgba(148,163,184,.15); border-radius:var(--radius); padding:18px}
+
+    /* Steps */
+    .steps{counter-reset: step}
+    .step{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; padding:14px; border-radius:14px; border:1px solid rgba(148,163,184,.12); background:rgba(2,6,23,.35); margin-bottom:12px}
+    .step::before{counter-increment: step; content: counter(step); display:grid; place-items:center; width:34px; height:34px; border-radius:10px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:700}
+    .step p{margin:2px 0 0; line-height:1.55}
+
+    /* Sticky aside */
+    aside{position:sticky; top:86px; height:fit-content}
+    .aside-block{margin-bottom:16px}
+    .kpi{display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid rgba(148,163,184,.12); border-radius:14px; background:rgba(2,6,23,.35)}
+    .kpi strong{font-size:18px}
+
+    /* Utilities */
+    .muted{color:var(--muted)}
+    .tip{border-left:3px solid var(--accent); padding-left:12px}
+
+    /* Print */
+    @media print{
+      header, .actions, aside{display:none}
+      body{background:#fff; color:#111}
+      .card{border:none}
+      .hero .imgwrap{box-shadow:none}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Nouilles sautées au poulet <span style="font-size:0.7em;color:#444;">(Préparation : 20 min)</span></h1>
-    <img src="images/nouilles_sautees.jpg" alt="Nouilles sautées">
+  <header>
+    <div class="wrap">
+      <div class="row">
+        <a class="breadcrumb" href="/index.html" aria-label="Retour à l'accueil">← Accueil</a>
+        <div class="actions">
+          <button class="btn" id="copyBtn" title="Copier la recette">Copier</button>
+          <button class="btn" id="printBtn" title="Imprimer">Imprimer</button>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <canvas id="ingredientsCanvas" width="500" height="270"></canvas>
+  <main class="wrap">
+    <!-- Hero image + title -->
+    <section class="hero">
+      <div class="imgwrap">
+        <img src="../images/Nouilles_sautees_au_poulet.jpg" alt="Nouilles sautées au poulet" />
+        <div class="overlay"></div>
+        <div class="title">
+          <h1>Nouilles sautées au poulet</h1>
+          <span class="badge" aria-label="Temps de préparation">⏱️ Préparation : 20 min</span>
+        </div>
+      </div>
+    </section>
 
-    <h2>Étapes</h2>
-    <ol>
-      <li>Cuire les nouilles selon le paquet.</li>
-      <li>Couper le poulet et la carotte en lamelles.</li>
-      <li>Faire revenir le poulet dans l’huile.</li>
-      <li>Ajouter la carotte, puis les nouilles et la sauce soja.</li>
-      <li>Mélanger et servir chaud.</li>
-    </ol>
-  </div>
+    <section class="content">
+      <article class="card" aria-labelledby="etapes-title">
+        <h2 id="etapes-title">Étapes</h2>
+        <div class="steps" id="steps">
+          <div class="step"><p>Cuire les nouilles selon le paquet.</p></div>
+          <div class="step"><p>Couper le poulet et la carotte en lamelles.</p></div>
+          <div class="step"><p>Faire revenir le poulet dans l’huile.</p></div>
+          <div class="step"><p>Ajouter la carotte, puis les nouilles et la sauce soja.</p></div>
+          <div class="step"><p>Mélanger et servir chaud.</p></div>
+        </div>
+        <div class="card tip" style="margin-top:12px"><strong>Astuce :</strong> égouttez bien les nouilles et faites sauter à feu vif pour garder du croquant.</div>
+      </article>
+
+      <aside>
+        <div class="aside-block kpi" aria-label="Temps de préparation">
+          <div>⏱️</div>
+          <div><div class="muted">Préparation</div><strong>20 min</strong></div>
+        </div>
+        <div class="aside-block card">
+          <h3>Ingrédients</h3>
+          <p class="muted" style="margin-top:6px">Ajoutez ici la liste d’ingrédients quand vous la pourrez (quantités, sauces, aromates…).</p>
+          <ul>
+            <li class="muted">—</li>
+          </ul>
+        </div>
+        <div class="aside-block card">
+          <h3>Conseils</h3>
+          <ul>
+            <li>Préparez tous les ingrédients à l’avance (cuisson rapide au wok).</li>
+            <li>Goûtez et ajustez en sauce soja, sucre et vinaigre pour l’équilibre.</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
 
   <script>
-    // Tableau des ingrédients
-    const ingredients = [
-      { name: "Nouilles", "2p": "200g", "3p": "300g", "4p": "400g" },
-      { name: "Blanc de poulet", "2p": "150g", "3p": "225g", "4p": "300g" },
-      { name: "Carotte", "2p": "1", "3p": "1", "4p": "2" },
-      { name: "Sauce soja", "2p": "2 c. à soupe", "3p": "3 c. à soupe", "4p": "4 c. à soupe" },
-      { name: "Huile", "2p": "1 c. à soupe", "3p": "1,5 c. à soupe", "4p": "2 c. à soupe" }
-    ];
+    // Impression
+    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
 
-    const canvas = document.getElementById('ingredientsCanvas');
-    const ctx = canvas.getContext('2d');
+    // Copier la recette (titre + étapes)
+    document.getElementById('copyBtn')?.addEventListener('click', () => {
+      const title = document.querySelector('h1')?.textContent?.trim() || '';
+      const steps = Array.from(document.querySelectorAll('.step p')).map((p,i) => `${i+1}. ${p.textContent?.trim()}`).join('\n');
+      const text = `${title}\n\nÉtapes\n${steps}`;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copié !';
+        setTimeout(()=> btn.textContent = 'Copier', 1200);
+      });
+    });
+  </script>
 
-    // Responsive canvas
-    function resizeCanvas() {
-      if (window.innerWidth < 610) {
-        canvas.width = Math.floor(window.innerWidth * 0.95);
-      } else {
-        canvas.width = 500;
-      }
-      drawTable();
+  <!-- Données structurées Schema.org pour SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Recipe",
+      "name": "Nouilles sautées au poulet",
+      "description": "Recette rapide de nouilles sautées au poulet.",
+      "prepTime": "PT20M",
+      "recipeCategory": "Plat principal",
+      "recipeCuisine": "Asiatique",
+      "image": ["../images/Nouilles_sautees_au_poulet.jpg"],
+      "recipeInstructions": [
+        {"@type":"HowToStep","text":"Cuire les nouilles selon le paquet."},
+        {"@type":"HowToStep","text":"Couper le poulet et la carotte en lamelles."},
+        {"@type":"HowToStep","text":"Faire revenir le poulet dans l’huile."},
+        {"@type":"HowToStep","text":"Ajouter la carotte, puis les nouilles et la sauce soja."},
+        {"@type":"HowToStep","text":"Mélanger et servir chaud."}
+      ]
     }
-    window.addEventListener('resize', resizeCanvas);
-
-    function drawTable() {
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Layout
-      const startX = 15, startY = 40;
-      const rowHeight = 38, colWidths = [canvas.width * 0.38, canvas.width * 0.18, canvas.width * 0.22, canvas.width * 0.22];
-      const header = ["Ingrédient", "2 pers.", "3 pers.", "4 pers."];
-
-      // Title
-      ctx.font = "bold 19px Segoe UI, Arial";
-      ctx.fillStyle = "#c32d37";
-      ctx.fillText("Tableau des ingrédients", startX, 26);
-
-      // Header background
-      ctx.fillStyle = "#e2a834";
-      ctx.roundRect(startX, startY, colWidths.reduce((a,b)=>a+b,0), rowHeight, 12);
-      ctx.fill();
-
-      // Header text
-      ctx.font = "bold 15px Segoe UI, Arial";
-      ctx.fillStyle = "#fff";
-      let colX = startX;
-      for (let i = 0; i < header.length; i++) {
-        ctx.fillText(header[i], colX + 14, startY + 24);
-        colX += colWidths[i];
-      }
-
-      // Rows
-      for (let r = 0; r < ingredients.length; r++) {
-        let curY = startY + rowHeight * (r + 1);
-
-        // Alternate row color
-        ctx.fillStyle = r % 2 === 0 ? "#fff8e1" : "#f7cac9";
-        ctx.roundRect(startX, curY, colWidths.reduce((a,b)=>a+b,0), rowHeight, 10);
-        ctx.fill();
-
-        // Cells text
-        ctx.fillStyle = "#2d2926";
-        ctx.font = "15px Segoe UI, Arial";
-        let curX = startX;
-        ctx.fillText(ingredients[r].name, curX + 14, curY + 24); curX += colWidths[0];
-        ctx.fillText(ingredients[r]["2p"], curX + 14, curY + 24); curX += colWidths[1];
-        ctx.fillText(ingredients[r]["3p"], curX + 14, curY + 24); curX += colWidths[2];
-        ctx.fillText(ingredients[r]["4p"], curX + 14, curY + 24);
-      }
-
-      // Grid lines
-      ctx.strokeStyle = "#c32d37";
-      ctx.lineWidth = 1;
-      // Vertical
-      let x = startX;
-      for (let i = 0; i <= colWidths.length; i++) {
-        ctx.beginPath();
-        ctx.moveTo(x, startY);
-        ctx.lineTo(x, startY + rowHeight * (ingredients.length + 1));
-        ctx.stroke();
-        x += colWidths[i] || 0;
-      }
-      // Horizontal
-      for (let i = 0; i <= ingredients.length + 1; i++) {
-        ctx.beginPath();
-        ctx.moveTo(startX, startY + rowHeight * i);
-        ctx.lineTo(startX + colWidths.reduce((a,b)=>a+b,0), startY + rowHeight * i);
-        ctx.stroke();
-      }
-    }
-
-    // Draw rounded rect helper
-    CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-      this.beginPath();
-      this.moveTo(x + r, y);
-      this.lineTo(x + w - r, y);
-      this.quadraticCurveTo(x + w, y, x + w, y + r);
-      this.lineTo(x + w, y + h - r);
-      this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-      this.lineTo(x + r, y + h);
-      this.quadraticCurveTo(x, y + h, x, y + h - r);
-      this.lineTo(x, y + r);
-      this.quadraticCurveTo(x, y, x + r, y);
-      this.closePath();
-    };
-
-    resizeCanvas(); // Initial draw
   </script>
 </body>
 </html>
