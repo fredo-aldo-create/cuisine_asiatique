@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Nouilles sautées au poulet (Préparation : 20 min)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f7cac9 0%, #fff8e1 100%);
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #2d2926;
+    }
+    .container {
+      max-width: 650px;
+      margin: 48px auto 24px auto;
+      background: rgba(255,255,255,0.97);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(195, 45, 55, 0.12);
+      padding: 32px 22px;
+    }
+    h1 {
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      font-size: 2em;
+      color: #c32d37;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    h1::after {
+      content: "🍜";
+      font-size: 1.2em;
+    }
+    img {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto 24px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px #c32d3724;
+      border: 3px solid #c32d37;
+      background: #fff;
+    }
+    #ingredientsCanvas {
+      display: block;
+      margin: 0 auto 32px auto;
+      border-radius: 16px;
+      box-shadow: 0 2px 10px #c32d3720;
+      border: 2px solid #e2a834;
+      background: #fff8e1;
+    }
+    h2 {
+      margin-top: 6px;
+      color: #e2a834;
+      font-size: 1.25em;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      letter-spacing: 1px;
+    }
+    ol {
+      background: #fff0e1;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 2px 8px #e2a83422;
+      font-size: 1.06em;
+      color: #2d2926;
+    }
+    ol li {
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+    @media (max-width: 700px) {
+      .container {
+        max-width: 98vw;
+        padding: 14px 2vw;
+      }
+      img {
+        max-width: 98vw;
+      }
+      #ingredientsCanvas {
+        width: 95vw !important;
+        max-width: 95vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Nouilles sautées au poulet <span style="font-size:0.7em;color:#444;">(Préparation : 20 min)</span></h1>
+    <img src="images/nouilles_sautees.jpg" alt="Nouilles sautées">
+
+    <canvas id="ingredientsCanvas" width="500" height="270"></canvas>
+
+    <h2>Étapes</h2>
+    <ol>
+      <li>Cuire les nouilles selon le paquet.</li>
+      <li>Couper le poulet et la carotte en lamelles.</li>
+      <li>Faire revenir le poulet dans l’huile.</li>
+      <li>Ajouter la carotte, puis les nouilles et la sauce soja.</li>
+      <li>Mélanger et servir chaud.</li>
+    </ol>
+  </div>
+
+  <script>
+    // Tableau des ingrédients
+    const ingredients = [
+      { name: "Nouilles", "2p": "200g", "3p": "300g", "4p": "400g" },
+      { name: "Blanc de poulet", "2p": "150g", "3p": "225g", "4p": "300g" },
+      { name: "Carotte", "2p": "1", "3p": "1", "4p": "2" },
+      { name: "Sauce soja", "2p": "2 c. à soupe", "3p": "3 c. à soupe", "4p": "4 c. à soupe" },
+      { name: "Huile", "2p": "1 c. à soupe", "3p": "1,5 c. à soupe", "4p": "2 c. à soupe" }
+    ];
+
+    const canvas = document.getElementById('ingredientsCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Responsive canvas
+    function resizeCanvas() {
+      if (window.innerWidth < 610) {
+        canvas.width = Math.floor(window.innerWidth * 0.95);
+      } else {
+        canvas.width = 500;
+      }
+      drawTable();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawTable() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Layout
+      const startX = 15, startY = 40;
+      const rowHeight = 38, colWidths = [canvas.width * 0.38, canvas.width * 0.18, canvas.width * 0.22, canvas.width * 0.22];
+      const header = ["Ingrédient", "2 pers.", "3 pers.", "4 pers."];
+
+      // Title
+      ctx.font = "bold 19px Segoe UI, Arial";
+      ctx.fillStyle = "#c32d37";
+      ctx.fillText("Tableau des ingrédients", startX, 26);
+
+      // Header background
+      ctx.fillStyle = "#e2a834";
+      ctx.roundRect(startX, startY, colWidths.reduce((a,b)=>a+b,0), rowHeight, 12);
+      ctx.fill();
+
+      // Header text
+      ctx.font = "bold 15px Segoe UI, Arial";
+      ctx.fillStyle = "#fff";
+      let colX = startX;
+      for (let i = 0; i < header.length; i++) {
+        ctx.fillText(header[i], colX + 14, startY + 24);
+        colX += colWidths[i];
+      }
+
+      // Rows
+      for (let r = 0; r < ingredients.length; r++) {
+        let curY = startY + rowHeight * (r + 1);
+
+        // Alternate row color
+        ctx.fillStyle = r % 2 === 0 ? "#fff8e1" : "#f7cac9";
+        ctx.roundRect(startX, curY, colWidths.reduce((a,b)=>a+b,0), rowHeight, 10);
+        ctx.fill();
+
+        // Cells text
+        ctx.fillStyle = "#2d2926";
+        ctx.font = "15px Segoe UI, Arial";
+        let curX = startX;
+        ctx.fillText(ingredients[r].name, curX + 14, curY + 24); curX += colWidths[0];
+        ctx.fillText(ingredients[r]["2p"], curX + 14, curY + 24); curX += colWidths[1];
+        ctx.fillText(ingredients[r]["3p"], curX + 14, curY + 24); curX += colWidths[2];
+        ctx.fillText(ingredients[r]["4p"], curX + 14, curY + 24);
+      }
+
+      // Grid lines
+      ctx.strokeStyle = "#c32d37";
+      ctx.lineWidth = 1;
+      // Vertical
+      let x = startX;
+      for (let i = 0; i <= colWidths.length; i++) {
+        ctx.beginPath();
+        ctx.moveTo(x, startY);
+        ctx.lineTo(x, startY + rowHeight * (ingredients.length + 1));
+        ctx.stroke();
+        x += colWidths[i] || 0;
+      }
+      // Horizontal
+      for (let i = 0; i <= ingredients.length + 1; i++) {
+        ctx.beginPath();
+        ctx.moveTo(startX, startY + rowHeight * i);
+        ctx.lineTo(startX + colWidths.reduce((a,b)=>a+b,0), startY + rowHeight * i);
+        ctx.stroke();
+      }
+    }
+
+    // Draw rounded rect helper
+    CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+      this.beginPath();
+      this.moveTo(x + r, y);
+      this.lineTo(x + w - r, y);
+      this.quadraticCurveTo(x + w, y, x + w, y + r);
+      this.lineTo(x + w, y + h - r);
+      this.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      this.lineTo(x + r, y + h);
+      this.quadraticCurveTo(x, y + h, x, y + h - r);
+      this.lineTo(x, y + r);
+      this.quadraticCurveTo(x, y, x + r, y);
+      this.closePath();
+    };
+
+    resizeCanvas(); // Initial draw
+  </script>
+</body>
+</html>
