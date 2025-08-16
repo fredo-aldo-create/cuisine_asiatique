@@ -1,1 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recettes asiatiques – Accueil</title>
+  <meta name="description" content="Recettes asiatiques : découvrez nos dernières recettes en images." />
+  <style>
+    :root{
+      --bg:#0f172a;          /* slate-900 */
+      --card:#111827;        /* gray-900 */
+      --text:#e5e7eb;        /* slate-200 */
+      --muted:#94a3b8;       /* slate-400 */
+      --accent:#22d3ee;      /* cyan-400 */
+      --ring:#38bdf8;        /* sky-400 */
+      --shadow:0 10px 20px rgba(0,0,0,.25);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif;
+      color:var(--text); background:linear-gradient(135deg,#0b1223, var(--bg));
+    }
+    header{position:sticky; top:0; z-index:10; backdrop-filter:saturate(160%) blur(8px);
+      background:linear-gradient(180deg, rgba(2,6,23,.75), rgba(2,6,23,.25));
+      border-bottom:1px solid rgba(148,163,184,.15);
+    }
+    .wrap{max-width:1200px; margin-inline:auto; padding:20px;}
+    h1{margin:0; font-size:clamp(22px,3.2vw,34px); letter-spacing:.2px}
+    p.lead{margin:.3rem 0 0; color:var(--muted)}
+
+    main .wrap{padding-top:28px}
+    .grid{
+      display:grid; gap:18px;
+      grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    }
+    a.card{display:block; text-decoration:none; color:inherit; background:linear-gradient(135deg,#0b1223,var(--card));
+      border:1px solid rgba(148,163,184,.15); border-radius:var(--radius); overflow:hidden; position:relative;
+      box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 0 0 0 rgba(34,211,238,.0);
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, opacity .18s ease, filter .18s ease;
+      isolation:isolate;
+    }
+    .card figure{margin:0}
+    .card img{width:100%; height:180px; object-fit:cover; display:block; aspect-ratio:4/3; background:#111}
+    .card figcaption{padding:12px 14px 14px}
+    .title{font-weight:600; font-size:16px; line-height:1.3}
+    .date{font-size:12px; color:var(--muted); margin-top:6px}
+
+    /* Effet : la carte survolée ressort, les autres s'atténuent */
+    .grid:has(.card:hover) .card{opacity:.55; filter:saturate(.7) contrast(.95)}
+    .grid:has(.card:hover) .card:hover{opacity:1; filter:none; transform:translateY(-2px); box-shadow:var(--shadow); border-color:rgba(56,189,248,.5)}
+
+    /* Focus clavier accessible */
+    .card:focus-visible{outline:none; box-shadow:0 0 0 3px var(--ring); transform:translateY(-2px)}
+
+    /* Petits écrans : images un peu plus hautes */
+    @media (max-width:420px){ .card img{height:160px} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Recettes asiatiques</h1>
+      <p class="lead">Dernières recettes en premier. Survolez une vignette pour la mettre en avant.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <!--
+        IMPORTANT : Ordonnez les cartes de la PLUS RÉCENTE (en haut) à la plus ancienne (en bas).
+        Pour ajouter une recette :
+        1) Dupliquez un bloc <a class="card">…</a>
+        2) Mettez à jour href (vers /articles/...), l'image (vers /images/...) et le libellé.
+      -->
+      <div class="grid" id="grid">
+        <!-- RECETTE LA PLUS RÉCENTE -->
+        <a class="card" href="/articles/Nouilles_sautees_au_poulet.html">
+          <figure>
+            <img src="/images/Nouilles_sautees_au_poulet.jpg" alt="Nouilles sautées au poulet" loading="lazy" />
+            <figcaption>
+              <div class="title">Nouilles sautées au poulet</div>
+              <div class="date">Nouvelle recette</div>
+            </figcaption>
+          </figure>
+        </a>
+
+        <!-- Exemples supplémentaires (remplacez / ajoutez / supprimez au besoin) -->
+        <a class="card" href="/articles/BoBun_boeuf.html">
+          <figure>
+            <img src="/images/BoBun_boeuf.jpg" alt="Bò Bún au bœuf" loading="lazy" />
+            <figcaption>
+              <div class="title">Bò Bún au bœuf</div>
+              <div class="date">—</div>
+            </figcaption>
+          </figure>
+        </a>
+
+        <a class="card" href="/articles/Ramen_miso.html">
+          <figure>
+            <img src="/images/Ramen_miso.jpg" alt="Ramen au miso" loading="lazy" />
+            <figcaption>
+              <div class="title">Ramen au miso</div>
+              <div class="date">—</div>
+            </figcaption>
+          </figure>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- JS léger pour reproduire l'effet d'atténuation si :has() n'est pas supporté -->
+  <script>
+    (function(){
+      var rootSupportsHas = CSS && CSS.supports && CSS.supports('selector(:has(*))');
+      if(rootSupportsHas) return; // CSS :has() gère déjà l'effet
+      var grid = document.getElementById('grid');
+      if(!grid) return;
+      grid.addEventListener('mouseover', function(e){
+        var card = e.target.closest('.card');
+        if(!card) return;
+        grid.classList.add('hovering');
+        card.classList.add('active');
+      }, true);
+      grid.addEventListener('mouseout', function(e){
+        var card = e.target.closest('.card');
+        if(!card) return;
+        card.classList.remove('active');
+        // Si aucune carte n'est active, retirer l'état global
+        if(!grid.querySelector('.card.active')) grid.classList.remove('hovering');
+      }, true);
+    })();
+  </script>
+  <style>
+    /* Styles utilisés par le fallback JS */
+    .grid.hovering .card{opacity:.55; filter:saturate(.7) contrast(.95)}
+    .grid.hovering .card.active{opacity:1; filter:none; transform:translateY(-2px); box-shadow:var(--shadow); border-color:rgba(56,189,248,.5)}
+  </style>
+
+  <noscript>
+    <div class="wrap" style="color:var(--muted); font-size:14px; padding-top:0">
+      Astuce : activez JavaScript pour un effet de surbrillance amélioré. Sans JS, chaque vignette se mettra simplement en avant au survol.
+    </div>
+  </noscript>
+</body>
+</html>
 
