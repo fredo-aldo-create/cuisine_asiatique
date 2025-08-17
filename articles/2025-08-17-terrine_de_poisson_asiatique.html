@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Terrine de poisson aux saveurs asiatiques — Recette</title>
+  <meta name="description" content="Terrine de poisson inspirée du Vietnam et de la Thaïlande : légère, parfumée, au lait de coco, citronnelle, herbes et épices. À servir bien frais." />
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#0b1223;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#22d3ee;
+      --accent-2:#a78bfa;
+      --ring:#38bdf8;
+      --radius:18px;
+      --shadow-lg:0 20px 40px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif; color:var(--text); background:linear-gradient(135deg,#0b1223, var(--bg));}
+
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(160%) blur(10px);
+      background:linear-gradient(180deg, rgba(2,6,23,.78), rgba(2,6,23,.35)); border-bottom:1px solid rgba(148,163,184,.15)}
+    .wrap{max-width:1024px; margin-inline:auto; padding:16px 20px}
+    .row{display:flex; align-items:center; gap:10px; justify-content:space-between}
+    .breadcrumb{display:flex; align-items:center; gap:8px; color:var(--muted); text-decoration:none}
+    .breadcrumb:hover{color:var(--text)}
+    .actions{display:flex; gap:8px}
+    .btn{appearance:none; border:1px solid rgba(148,163,184,.18); color:var(--text); background:linear-gradient(180deg,#0b1223,#0f172a); padding:8px 12px; border-radius:12px; cursor:pointer; font-weight:500}
+    .btn:hover{border-color:rgba(56,189,248,.45)}
+    .btn:focus-visible{outline:none; box-shadow:0 0 0 3px var(--ring)}
+
+    .hero{position:relative}
+    .hero .imgwrap{position:relative; border-radius:22px; overflow:hidden; border:1px solid rgba(148,163,184,.15); box-shadow:var(--shadow-lg)}
+    .hero img{width:100%; height:360px; object-fit:cover; display:block; background:#111}
+    .hero .overlay{position:absolute; inset:0; background:linear-gradient(180deg, transparent 20%, rgba(2,6,23,.65) 75%, rgba(2,6,23,.9) 100%)}
+    .hero .title{position:absolute; left:22px; bottom:20px; right:22px; display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px}
+    h1{margin:0; font-size:clamp(22px,4.2vw,40px); letter-spacing:.2px}
+    .badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:600; color:#e0fbff}
+
+    .content{display:grid; grid-template-columns: 1fr 300px; gap:22px; margin-top:24px}
+    @media (max-width: 980px){ .content{grid-template-columns: 1fr} }
+
+    .card{background:linear-gradient(135deg,#0b1223,var(--card)); border:1px solid rgba(148,163,184,.15); border-radius:var(--radius); padding:18px}
+
+    .steps{counter-reset: step}
+    .step{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; padding:14px; border-radius:14px; border:1px solid rgba(148,163,184,.12); background:rgba(2,6,23,.35); margin-bottom:12px}
+    .step::before{counter-increment: step; content: counter(step); display:grid; place-items:center; width:34px; height:34px; border-radius:10px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:700}
+    .step p{margin:2px 0 0; line-height:1.55}
+
+    aside{position:sticky; top:86px; height:fit-content}
+    .aside-block{margin-bottom:16px}
+    .kpi{display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid rgba(148,163,184,.12); border-radius:14px; background:rgba(2,6,23,.35)}
+    .kpi strong{font-size:18px}
+
+    .muted{color:var(--muted)}
+    .tip{border-left:3px solid var(--accent); padding-left:12px}
+
+    @media print{
+      *{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .actions{ display:none !important; }
+      header, aside{ position: static !important; }
+      .hero .imgwrap{ box-shadow: none !important; }
+      .hero .overlay{ display:none !important; }
+      body{ background:#fff !important; color:#111 !important; }
+      .card{ background:#fff !important; border:1px solid #ddd !important; }
+      .step, .aside-block, .card{ page-break-inside: avoid; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row">
+        <a class="breadcrumb" href="/index.html" aria-label="Retour à l'accueil">← Accueil</a>
+        <div class="actions">
+          <button class="btn" id="copyBtn" title="Copier la recette">Copier</button>
+          <button class="btn" id="printBtn" title="Imprimer">Imprimer</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="imgwrap">
+        <img src="/images/2025-08-17-terrine_de_poisson_asiatique.jpg" alt="Terrine de poisson aux saveurs asiatiques" />
+        <div class="overlay"></div>
+        <div class="title">
+          <h1>Terrine de poisson aux saveurs asiatiques</h1>
+          <span class="badge" aria-label="Temps de préparation">⏱️ Préparation : 25 min • Cuisson : 45 min • Repos : 4 h</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <article class="card" aria-labelledby="etapes-title">
+        <h2 id="etapes-title">Étapes</h2>
+        <div class="steps" id="steps">
+          <div class="step"><p>Préchauffez le four à 160&nbsp;°C. Chemisez une terrine de papier cuisson (ou huilez légèrement).</p></div>
+          <div class="step"><p>Mixez finement 600&nbsp;g de poisson blanc et 150&nbsp;g de crevettes décortiquées.</p></div>
+          <div class="step"><p>Ajoutez 2 blancs d’œufs, 20&nbsp;cl de lait de coco, 2&nbsp;c.&nbsp;à&nbsp;s. de nuoc‑mâm (ou soja clair), 1&nbsp;c.&nbsp;à&nbsp;c. de pâte de curry rouge, 1&nbsp;c.&nbsp;à&nbsp;c. de gingembre râpé, 2 gousses d’ail hachées et 1 tige de citronnelle émincée. Mixez jusqu’à texture homogène.</p></div>
+          <div class="step"><p>Incorporez délicatement 1 petit bouquet de coriandre ciselée et 6 feuilles de basilic thaï. Assaisonnez avec 1&nbsp;c.&nbsp;à&nbsp;s. de jus de citron vert, poivre et (optionnel) une pincée de piment.</p></div>
+          <div class="step"><p>Versez dans la terrine, lissez. Placez la terrine dans un plat, ajoutez de l’eau chaude à mi‑hauteur (bain‑marie) et enfournez 45&nbsp;min. La terrine doit être prise au centre.</p></div>
+          <div class="step"><p>Laissez tiédir, puis réfrigérez au moins 4&nbsp;h (idéalement une nuit) avant de trancher.</p></div>
+        </div>
+        <div class="card tip" style="margin-top:12px">
+          <strong>Astuce :</strong> pour une découpe nette, démoulez bien froid et essuyez la lame entre chaque tranche.
+        </div>
+      </article>
+
+      <aside>
+        <div class="aside-block kpi" aria-label="Temps et rendements">
+          <div>🍽️</div>
+          <div>
+            <div class="muted">Rendement</div>
+            <strong>6 parts</strong>
+          </div>
+        </div>
+
+        <div class="aside-block card">
+          <h3>Ingrédients</h3>
+
+          <h4>Base (identiques pour toutes portions)</h4>
+          <ul>
+            <li>Poisson blanc (cabillaud/colin/lieu) — mixé</li>
+            <li>Crevettes — décortiquées</li>
+            <li>Blancs d’œufs</li>
+            <li>Lait de coco</li>
+            <li>Nuoc‑mâm (ou sauce soja claire)</li>
+            <li>Pâte de curry rouge (ou jaune, plus doux)</li>
+            <li>Gingembre frais râpé</li>
+            <li>Ail — haché</li>
+            <li>Citronnelle — partie tendre émincée</li>
+            <li>Coriandre fraîche — ciselée</li>
+            <li>Basilic thaï — ciselé</li>
+            <li>Jus de citron vert</li>
+            <li>Piment en poudre (optionnel), poivre</li>
+          </ul>
+
+          <h4>Quantités pour 2, 4 et 6 personnes</h4>
+          <div class="muted" style="margin-bottom:8px">Les ingrédients restent les mêmes, seules les quantités changent.</div>
+          <ul>
+            <li><strong>2 pers.</strong> — Poisson 200&nbsp;g • Crevettes 50&nbsp;g • Blancs d’œufs 1 • Lait de coco 7&nbsp;cl • Nuoc‑mâm 2&nbsp;c.&nbsp;à&nbsp;c. • Curry 1/3&nbsp;c.&nbsp;à&nbsp;c. • Gingembre 1/3&nbsp;c.&nbsp;à&nbsp;c. • Ail 1&nbsp;gousse • Citronnelle 1/3&nbsp;tige • Coriandre 2&nbsp;c.&nbsp;à&nbsp;s. • Basilic 2&nbsp;feuilles • Jus de citron vert 1&nbsp;c.&nbsp;à&nbsp;c.</li>
+            <li><strong>4 pers.</strong> — Poisson 400&nbsp;g • Crevettes 100&nbsp;g • Blancs d’œufs 2 • Lait de coco 14&nbsp;cl • Nuoc‑mâm 1&nbsp;c.&nbsp;à&nbsp;s. • Curry 2/3&nbsp;c.&nbsp;à&nbsp;c. • Gingembre 2/3&nbsp;c.&nbsp;à&nbsp;c. • Ail 2&nbsp;gousses • Citronnelle 2/3&nbsp;tige • Coriandre 4&nbsp;c.&nbsp;à&nbsp;s. • Basilic 4&nbsp;feuilles • Jus de citron vert 2&nbsp;c.&nbsp;à&nbsp;c.</li>
+            <li><strong>6 pers.</strong> — Poisson 600&nbsp;g • Crevettes 150&nbsp;g • Blancs d’œufs 2 • Lait de coco 20&nbsp;cl • Nuoc‑mâm 2&nbsp;c.&nbsp;à&nbsp;s. • Curry 1&nbsp;c.&nbsp;à&nbsp;c. • Gingembre 1&nbsp;c.&nbsp;à&nbsp;c. • Ail 2&nbsp;gousses • Citronnelle 1&nbsp;tige • Coriandre 1&nbsp;petit bouquet • Basilic 6&nbsp;feuilles • Jus de citron vert 1&nbsp;c.&nbsp;à&nbsp;s.</li>
+          </ul>
+        </div>
+
+        <div class="aside-block card">
+          <h3>Accompagnements & sauces</h3>
+          <ul>
+            <li>Salade de concombre à la sauce soja & vinaigre de riz.</li>
+            <li>Quartiers de citron vert.</li>
+            <li>Sauce yaourt, coriandre & piment doux.</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+
+    document.getElementById('copyBtn')?.addEventListener('click', async () => {
+      const header = document.querySelector('header')?.cloneNode(true);
+      const main = document.querySelector('main')?.cloneNode(true);
+      header?.querySelector('.actions')?.remove();
+      main?.querySelectorAll('.overlay').forEach(el => el.remove());
+      const docFrag = `<article>\${header ? header.outerHTML : ''}\${main ? main.outerHTML : ''}</article>`.trim();
+      const plain = (() => {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = docFrag;
+        tmp.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+        return tmp.innerText.replace(/\n{3,}/g, '\n\n').trim();
+      })();
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          const item = new ClipboardItem({
+            'text/html': new Blob([docFrag], { type: 'text/html' }),
+            'text/plain': new Blob([plain], { type: 'text/plain' })
+          });
+          await navigator.clipboard.write([item]);
+        } else {
+          await navigator.clipboard.writeText(plain);
+        }
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copié !';
+        setTimeout(()=> btn.textContent = 'Copier', 1200);
+      } catch (err){
+        alert("Impossible de copier automatiquement.");
+      }
+    });
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Recipe",
+    "name": "Terrine de poisson aux saveurs asiatiques",
+    "description": "Terrine de poisson inspirée du Vietnam et de la Thaïlande, légère et parfumée au lait de coco, citronnelle, herbes et épices.",
+    "prepTime": "PT25M",
+    "cookTime": "PT45M",
+    "totalTime": "PT4H10M",
+    "recipeCategory": "Entrée",
+    "recipeCuisine": "Asiatique",
+    "image": ["/images/2025-08-17-terrine_de_poisson_asiatique.jpg"],
+    "recipeYield": "6 parts",
+    "recipeIngredient": [
+      "Poisson blanc (cabillaud/colin/lieu), 600 g",
+      "Crevettes décortiquées, 150 g",
+      "Blancs d’œufs, 2",
+      "Lait de coco, 20 cl",
+      "Nuoc-mâm (ou sauce soja claire), 2 c. à s.",
+      "Pâte de curry rouge, 1 c. à c.",
+      "Gingembre frais râpé, 1 c. à c.",
+      "Ail, 2 gousses",
+      "Citronnelle (partie tendre), 1 tige",
+      "Coriandre fraîche, 1 petit bouquet",
+      "Basilic thaï, 6 feuilles",
+      "Jus de citron vert, 1 c. à s.",
+      "Piment (optionnel), 1 pincée, Poivre"
+    ],
+    "recipeInstructions": [
+      {"@type":"HowToStep","text":"Préchauffez le four à 160 °C. Chemisez une terrine."},
+      {"@type":"HowToStep","text":"Mixez le poisson et les crevettes."},
+      {"@type":"HowToStep","text":"Ajoutez blancs d’œufs, lait de coco, nuoc-mâm, pâte de curry, gingembre, ail, citronnelle. Mixez."},
+      {"@type":"HowToStep","text":"Incorporez coriandre et basilic. Assaisonnez de jus de citron vert et piment."},
+      {"@type":"HowToStep","text":"Cuisez 45 min au bain-marie jusqu’à prise."},
+      {"@type":"HowToStep","text":"Refroidissez puis réfrigérez 4 h avant de trancher."}
+    ]
+  }
+  </script>
+</body>
+</html>
