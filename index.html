@@ -1,97 +1,46 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Recettes asiatiques – Accueil</title>
-  <meta name="description" content="Recettes asiatiques : découvrez nos dernières recettes en images." />
   <style>
-    :root{ --bg:#0f172a; --card:#111827; --text:#e5e7eb; --muted:#94a3b8; --accent:#22d3ee; --ring:#38bdf8; --shadow:0 10px 20px rgba(0,0,0,.25); --radius:18px; }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif; color:var(--text); background:linear-gradient(135deg,#0b1223, var(--bg)); }
-    header{ position:sticky; top:0; z-index:10; backdrop-filter:saturate(160%) blur(8px);
-      background:linear-gradient(180deg, rgba(2,6,23,.75), rgba(2,6,23,.25)); border-bottom:1px solid rgba(148,163,184,.15); }
-    .wrap{ max-width:1200px; margin-inline:auto; padding:20px; }
-    h1{ margin:0; font-size:clamp(22px,3.2vw,34px); letter-spacing:.2px }
-    p.lead{ margin:.3rem 0 0; color:var(--muted) }
-    main .wrap{ padding-top:28px }
-    .grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); }
-    a.card{ display:block; text-decoration:none; color:inherit; background:linear-gradient(135deg,#0b1223,var(--card));
-      border:1px solid rgba(148,163,184,.15); border-radius:var(--radius); overflow:hidden; position:relative;
-      box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 0 0 0 rgba(34,211,238,.0);
-      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, opacity .18s ease, filter .18s ease; isolation:isolate; }
-    .card figure{ margin:0 }
-    .card img{ width:100%; height:180px; object-fit:cover; display:block; aspect-ratio:4/3; background:#111 }
-    .card figcaption{ padding:12px 14px 14px }
-    .title{ font-weight:600; font-size:16px; line-height:1.3 }
-    .date{ font-size:12px; color:var(--muted); margin-top:6px }
-    .grid:has(.card:hover) .card{ opacity:.55; filter:saturate(.7) contrast(.95) }
-    .grid:has(.card:hover) .card:hover{ opacity:1; filter:none; transform:translateY(-2px); box-shadow:var(--shadow); border-color:rgba(56,189,248,.5) }
-    .card:focus-visible{ outline:none; box-shadow:0 0 0 3px var(--ring); transform:translateY(-2px) }
-    @media (max-width:420px){ .card img{height:160px} }
+    :root{
+      --bg:#0f172a; --text:#e5e7eb; --muted:#94a3b8; --card:#111827; --accent:#22d3ee; --ring:rgba(34,211,238,.35);
+    }
+    html,body{margin:0;padding:0;background:linear-gradient(135deg,var(--bg),#111827 60%);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif}
+    header{padding:1.25rem 1.25rem 0;}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 1.25rem 2rem}
+    h1{margin:.25rem 0 1rem;font-size:clamp(1.6rem,2.5vw,2.2rem);line-height:1.2;background:linear-gradient(90deg,var(--accent),#a78bfa);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .dek{color:var(--muted);margin:0 0 1rem}
+
+    .grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}
+    .card{background:var(--card);border:1px solid rgba(255,255,255,.06);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35);display:flex;flex-direction:column;transition:transform .15s ease, box-shadow .15s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+    .thumb{position:relative;isolation:isolate;aspect-ratio:1/1;background:linear-gradient(135deg,#1f2937,#0b1223);display:block}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+    .thumb img[src=""], .thumb img:not([src]){display:none}
+    .card-body{padding:1rem;display:flex;flex-direction:column;gap:.5rem}
+    .title{margin:0;font-size:1.05rem;line-height:1.35}
+    .excerpt{margin:0;color:var(--muted);font-size:.95rem}
+    .meta{display:flex;gap:.75rem;align-items:center;color:#cbd5e1;font-size:.8rem}
+    .link{margin-top:.25rem;align-self:flex-start;color:var(--accent);text-decoration:none;font-weight:600;border-bottom:1px dashed var(--ring)}
+    .link:hover{border-bottom-style:solid}
+    .badge{display:inline-block;border:1px solid var(--ring);padding:.1rem .5rem;border-radius:999px;font-size:.75rem;color:#cbd5e1}
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <h1>Recettes asiatiques</h1>
-      <p class="lead"></p>
-    </div>
+  <header class="wrap">
+    <h1>Recettes asiatiques</h1>
   </header>
 
-  <main>
-    <div class="wrap">
-      <div class="grid" id="grid">
-        <!--RECIPES:start-->
+  <main class="wrap">
+    <div class="grid">
+      <!-- FEED:start -->
 
-        <!-- (tes anciennes cartes peuvent rester ici ; elles s'afficheront sous la plus récente) -->
-        <!--
-        <a class="card" href="/articles/Nouilles_sautees_au_poulet.html">
-          <figure>
-            <img src="/images/Nouilles_sautees_au_poulet.jpg" alt="Nouilles sautées au poulet" loading="lazy" />
-            <figcaption>
-              <div class="title">Nouilles sautées au poulet</div>
-              <div class="date">16/08/2025</div>
-            </figcaption>
-          </figure>
-        </a>
-        -->
-
-        <!--RECIPES:end-->
-      </div>
+      <!-- FEED:end -->
+      <!-- Pour ajouter d’autres recettes manuellement, dupliquez un bloc <article class="card"> ci-dessus -->
     </div>
   </main>
-
-  <script>
-    (function(){
-      var rootSupportsHas = CSS && CSS.supports && CSS.supports('selector(:has(*))');
-      if(rootSupportsHas) return;
-      var grid = document.getElementById('grid');
-      if(!grid) return;
-      grid.addEventListener('mouseover', function(e){
-        var card = e.target.closest('.card');
-        if(!card) return;
-        grid.classList.add('hovering');
-        card.classList.add('active');
-      }, true);
-      grid.addEventListener('mouseout', function(e){
-        var card = e.target.closest('.card');
-        if(!card) return;
-        card.classList.remove('active');
-        if(!grid.querySelector('.card.active')) grid.classList.remove('hovering');
-      }, true);
-    })();
-  </script>
-  <style>
-    .grid.hovering .card{opacity:.55; filter:saturate(.7) contrast(.95)}
-    .grid.hovering .card.active{opacity:1; filter:none; transform:translateY(-2px); box-shadow:var(--shadow); border-color:rgba(56,189,248,.5)}
-  </style>
-
-  <noscript>
-    <div class="wrap" style="color:var(--muted); font-size:14px; padding-top:0">
-      Astuce : activez JavaScript pour un effet de surbrillance amélioré. Sans JS, chaque vignette se mettra simplement en avant au survol.
-    </div>
-  </noscript>
 </body>
 </html>
