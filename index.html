@@ -68,45 +68,8 @@
 
   <main>
     <div class="wrap">
-      <!--
-        IMPORTANT : Ordonnez les cartes de la PLUS RÉCENTE (en haut) à la plus ancienne (en bas).
-        Pour ajouter une recette :
-        1) Dupliquez un bloc <a class="card">…</a>
-        2) Mettez à jour href (vers /articles/...), l'image (vers /images/...) et le libellé.
-      -->
       <div class="grid" id="grid">
-        <!-- RECETTE LA PLUS RÉCENTE -->
-        <a class="card" href="/articles/Nouilles_sautees_au_poulet.html">
-          <figure>
-            <img src="/images/Nouilles_sautees_au_poulet.jpg" alt="Nouilles sautées au poulet" loading="lazy" />
-            <figcaption>
-              <div class="title">Nouilles sautées au poulet</div>
-              <div class="date">16/08/2025</div>
-            </figcaption>
-          </figure>
-        </a>
-
-        <!-- Exemples supplémentaires (remplacez / ajoutez / supprimez au besoin) -->
-        <a class="card" href="/articles/BoBun_boeuf.html">
-          <figure>
-            <img src="/images/BoBun_boeuf.jpg" alt="Bò Bún au bœuf" loading="lazy" />
-            <figcaption>
-              <div class="title">Bò Bún au bœuf</div>
-              <div class="date">—</div>
-            </figcaption>
-          </figure>
-        </a>
-
-        <a class="card" href="/articles/Ramen_miso.html">
-          <figure>
-            <img src="/images/Ramen_miso.jpg" alt="Ramen au miso" loading="lazy" />
-            <figcaption>
-              <div class="title">Ramen au miso</div>
-              <div class="date">—</div>
-            </figcaption>
-          </figure>
-        </a>
-
+        <!--RECIPES-->
       </div>
     </div>
   </main>
@@ -128,13 +91,11 @@
         var card = e.target.closest('.card');
         if(!card) return;
         card.classList.remove('active');
-        // Si aucune carte n'est active, retirer l'état global
         if(!grid.querySelector('.card.active')) grid.classList.remove('hovering');
       }, true);
     })();
   </script>
   <style>
-    /* Styles utilisés par le fallback JS */
     .grid.hovering .card{opacity:.55; filter:saturate(.7) contrast(.95)}
     .grid.hovering .card.active{opacity:1; filter:none; transform:translateY(-2px); box-shadow:var(--shadow); border-color:rgba(56,189,248,.5)}
   </style>
@@ -146,13 +107,3 @@
   </noscript>
 </body>
 </html>
-
-
-    <article class="card">
-      <a href="articles/2025-08-17-Poulet_sauté_aux_légumes_à_la_sauce_soja.html">
-        <img src="images/2025-08-17-Poulet_sauté_aux_légumes_à_la_sauce_soja.jpg" alt="Poulet sauté aux légumes à la sauce soja" />
-        <h2>Poulet sauté aux légumes à la sauce soja</h2>
-        <p>Un plat asiatique simple et rapide à préparer, alliant poulet tendre et légumes croquants, relevé d'une sauce soja savoureuse.</p>
-      </a>
-    </article>
-    
