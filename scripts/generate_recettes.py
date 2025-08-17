@@ -167,7 +167,7 @@ def generate_image(titre: str) -> str:
     with open(filepath, "wb") as f:
         f.write(img_bytes)
 
-    return f"images/{filename}"
+    return f"/images/{filename}"
 
 def generate_html_from_template(data: dict, image_path: str) -> str:
     """Insère les données dans le template HTML de recette."""
