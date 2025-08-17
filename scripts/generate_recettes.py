@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 import os
-from datetime import datetime, timezone
+from datetime import datetime, date, timezone
 from pathlib import Path
 from openai import OpenAI
 import base64
 import json, re
+import unicodedata
 
 # --- Dossiers ---
 ROOT = Path(__file__).resolve().parent.parent
@@ -14,6 +15,9 @@ TEMPLATES_DIR = ROOT / "templates"
 INDEX_FILE = ROOT / "index.html"
 TEMPLATE_FILE = TEMPLATES_DIR / "template_cuisine.html"
 
+ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
+IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+
 # =========================
 # OpenAI client
 # =========================
@@ -22,6 +26,12 @@ if not api_key:
     raise SystemExit("❌ Erreur : OPENAI_API_KEY manquant (ajoute-le dans GitHub > Settings > Secrets and variables > Actions).")
 client = OpenAI(api_key=api_key)
 
+def slugify(s: str) -> str:
+    """ASCII, minuscules, remplace tout ce qui n'est pas [a-z0-9] par _"""
+    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
+    s = s.lower()
+    s = re.sub(r"[^a-z0-9]+", "_", s).strip("_")
+    return s
 
 def generate_recette_via_ai():
     """Génère une recette asiatique simple en JSON structuré."""
@@ -64,7 +74,6 @@ def generate_recette_via_ai():
     except json.JSONDecodeError as e:
         raise ValueError(f"JSON invalide: {e}\n---\n{json_str[:500]}")
 
-    # Vérifications minimales
     required = ["titre","description","duree_preparation","duree_preparation_iso","etapes","ingredients","astuce","conseils"]
     for k in required:
         if k not in data:
@@ -75,26 +84,24 @@ def generate_recette_via_ai():
 
     return data
 
-
 def generate_image(titre):
     """Génère une image réaliste de la recette avec couverts + baguettes."""
     prompt = f"Photo réaliste d'un plat asiatique : {titre}, servi dans une belle assiette, avec des baguettes élégantes et des couverts modernes, style photo culinaire professionnelle."
     response = client.images.generate(
         model="gpt-image-1",
         prompt=prompt,
-        size="1024x1024"  # format accepté
+        size="1024x1024"
     )
     b64 = response.data[0].b64_json
     img_bytes = base64.b64decode(b64)
 
-   today = date.today().isoformat()
-    filename = f"{today}-{titre.replace(' ', '_')}.jpg"
+    today = date.today().isoformat()
+    filename = f"{today}-{slugify(titre)}.jpg"
     filepath = IMAGES_DIR / filename
     with open(filepath, "wb") as f:
         f.write(img_bytes)
 
     return f"images/{filename}"
-
 
 def generate_html_from_template(data: dict, image_path: str) -> str:
     """Insère les données dans le template HTML de recette."""
@@ -129,18 +136,15 @@ def generate_html_from_template(data: dict, image_path: str) -> str:
 
     return html
 
-
 def save_article(html: str, titre: str):
-    today = datetime.date.today().isoformat()
-    filename = f"{today}-{titre.replace(' ', '_')}.html"
+    today = date.today().isoformat()
+    filename = f"{today}-{slugify(titre)}.html"
     filepath = ARTICLES_DIR / filename
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(html)
     return filepath
 
-
 # ============ Helpers ============
-
 def _html_to_text(s: str) -> str:
     return re.sub(r"<[^>]+>", " ", s or "").replace("\n", " ").strip()
 
@@ -154,11 +158,9 @@ def _make_excerpt(desc: str, max_len=160, min_len=150) -> str:
     return txt[:cut].strip()
 
 # ============ Index update ============
-
 def update_index(titre, desc, image, article_file):
-    """Injecte une carte au format INFO-RÉVEIL entre <!-- FEED:start --> et <!-- FEED:end -->, en haut, sans écraser l’existant."""
+    """Injecte une carte dans le bloc FEED sans écraser l’existant."""
     date_str = datetime.now().strftime("%d/%m/%Y")
-    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S +0000")
 
     href = f"articles/{os.path.basename(article_file)}"
     img_src = image.lstrip("/")
@@ -178,7 +180,6 @@ def update_index(titre, desc, image, article_file):
         pos = m.end()
         idx_html = idx_html[:pos] + "\n<!-- FEED:start -->\n<!-- FEED:end -->\n" + idx_html[pos:]
 
-    # Carte EXACTEMENT comme sur le site d’infos
     card_html = f"""
           <!-- card-{os.path.splitext(os.path.basename(article_file))[0]} -->
           <article class="card">
@@ -196,8 +197,8 @@ def update_index(titre, desc, image, article_file):
             </div>
           </article>""".rstrip()
 
-    # Injection + déduplication
     def inject(feed_block: str) -> str:
+        # Déduplication par href
         feed_block = re.sub(
             rf'\s*<!-- card-[^-]+? -->\s*<article class="card">[\s\S]*?href="{re.escape(href)}"[\s\S]*?</article>',
             "", feed_block, flags=re.I
@@ -208,13 +209,12 @@ def update_index(titre, desc, image, article_file):
     idx_html = re.sub(r"<!-- FEED:start -->[\s\S]*?<!-- FEED:end -->",
                       lambda m: inject(m.group(0)), idx_html, count=1, flags=re.S)
 
-    # Horodatage
+    # Horodatage build
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S +0000")
     idx_html = idx_html + f"\n<!-- automated-build {stamp} -->\n"
 
     with open(INDEX_FILE, "w", encoding="utf-8") as f:
         f.write(idx_html)
-
 
 def main():
     data = generate_recette_via_ai()
@@ -223,7 +223,6 @@ def main():
     article_file = save_article(html, data["titre"])
     update_index(data["titre"], data["description"], image_path, article_file)
     print(f"✅ Recette publiée : {article_file}")
-
 
 if __name__ == "__main__":
     main()
