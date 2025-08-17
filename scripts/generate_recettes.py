@@ -19,7 +19,7 @@ TEMPLATE_FILE = TEMPLATES_DIR / "template_cuisine.html"
 # =========================
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
-    die("OPENAI_API_KEY manquant (Secrets GitHub > Actions).")
+    raise SystemExit("❌ Erreur : OPENAI_API_KEY manquant (ajoute-le dans GitHub > Settings > Secrets and variables > Actions).")
 client = OpenAI(api_key=api_key)
 
 
