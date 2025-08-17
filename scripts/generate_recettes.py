@@ -26,9 +26,9 @@ client = OpenAI(api_key=api_key)
 
 
 def generate_recette_via_ai():
-    """Demande à l’IA de générer une recette asiatique facile au format JSON exploitable."""
+    """Génère une recette asiatique simple en JSON et l'extrait proprement (même si l'IA ajoute du texte autour)."""
     prompt = """
-    Génère une recette asiatique simple en français, sous format JSON structuré avec les clés :
+    Génère une recette asiatique simple en français, sous format JSON structuré avec les clés EXACTES :
     {
       "titre": "...",
       "description": "...",
@@ -43,18 +43,41 @@ def generate_recette_via_ai():
       "astuce": "...",
       "conseils": ["...", "..."]
     }
-
-    Concentre-toi sur des recettes asiatiques faciles (nouilles, riz, poulet, légumes, soupe, curry, etc).
-    Donne uniquement du JSON valide, sans texte explicatif.
+    Donne UNIQUEMENT le JSON valide (aucun texte avant/après).
     """
-    response = client.responses.create(
+    resp = client.responses.create(
         model="gpt-4.1-mini",
         input=prompt,
         temperature=0.7,
-        max_output_tokens=800
+        max_output_tokens=800,
     )
-    import json
-    return json.loads(response.output_text)
+
+    import json, re
+    raw = (resp.output_text or "").strip()
+    if not raw:
+        raise ValueError("Réponse vide de l'IA")
+
+    # Extrait strictement le bloc JSON (entre la 1re { et la dernière })
+    m = re.search(r"\{.*\}", raw, flags=re.S)
+    if not m:
+        raise ValueError(f"Aucun JSON trouvé dans la réponse: {raw[:200]}")
+    json_str = m.group(0)
+
+    try:
+        data = json.loads(json_str)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"JSON invalide: {e}\n---\n{json_str[:500]}")
+
+    # Contrôle de schéma minimal
+    required = ["titre","description","duree_preparation","duree_preparation_iso","etapes","ingredients","astuce","conseils"]
+    for k in required:
+        if k not in data:
+            raise ValueError(f"Clé manquante dans le JSON: {k}")
+    for ppl in ["2","3","4"]:
+        if ppl not in data["ingredients"]:
+            raise ValueError(f"Ingrédients manquants pour {ppl} personnes")
+
+    return data
 
 
 def generate_image(titre):
