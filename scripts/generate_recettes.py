@@ -83,11 +83,11 @@ def generate_recette_via_ai():
 def generate_image(titre):
     """Génère une image réaliste de la recette avec couverts + baguettes."""
     prompt = f"Photo réaliste d'un plat asiatique : {titre}, servi dans une belle assiette, avec des baguettes élégantes et des couverts modernes, style photo culinaire professionnelle."
-  response = client.images.generate(
-    model="gpt-image-1",
-    prompt=prompt,
-    size="1024x1024"  # format standard supporté
-)
+    response = client.images.generate(
+        model="gpt-image-1",
+        prompt=prompt,
+        size="1024x1024"  # format standard supporté
+    )
     b64 = response.data[0].b64_json
     img_bytes = base64.b64decode(b64)
 
@@ -98,6 +98,7 @@ def generate_image(titre):
         f.write(img_bytes)
 
     return f"images/{filename}"
+
 
 
 def generate_html_from_template(data: dict, image_path: str) -> str:
