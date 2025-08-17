@@ -93,7 +93,7 @@ def generate_image(titre):
     with open(filepath, "wb") as f:
         f.write(img_bytes)
 
-    return f"images/{filename}"
+    return f"/images/{filename}"
 
 
 def generate_html_from_template(data: dict, image_path: str) -> str:
