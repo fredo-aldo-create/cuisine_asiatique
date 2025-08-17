@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from openai import OpenAI
 import base64
