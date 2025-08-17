@@ -5,6 +5,9 @@ on:
     - cron: "0 5 * * *"   # Tous les jours à 5h UTC (7h heure de Paris)
   workflow_dispatch:       # Permet aussi de lancer manuellement
 
+permissions:
+  contents: write   # 👈 donne le droit de push
+
 jobs:
   build:
     runs-on: ubuntu-latest
