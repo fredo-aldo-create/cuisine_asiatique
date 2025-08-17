@@ -13,8 +13,17 @@ TEMPLATES_DIR = ROOT / "templates"
 INDEX_FILE = ROOT / "index.html"
 TEMPLATE_FILE = TEMPLATES_DIR / "template_cuisine.html"
 
-# --- OpenAI client ---
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# =========================
+# OpenAI client
+# =========================
+api_key = os.getenv("OPENAI_API_KEY")
+if not api_key:
+    die("OPENAI_API_KEY manquant (Secrets GitHub > Actions).")
+client = OpenAI(api_key=api_key)
+
+
+
 
 def generate_recette_via_ai():
     """Demande à l’IA de générer une recette asiatique facile au format JSON exploitable."""
