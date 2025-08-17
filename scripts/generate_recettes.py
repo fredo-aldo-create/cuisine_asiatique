@@ -4,6 +4,7 @@ import datetime
 from pathlib import Path
 from openai import OpenAI
 import base64
+import json, re
 
 # --- Dossiers ---
 ROOT = Path(__file__).resolve().parent.parent
@@ -12,7 +13,6 @@ IMAGES_DIR = ROOT / "images"
 TEMPLATES_DIR = ROOT / "templates"
 INDEX_FILE = ROOT / "index.html"
 TEMPLATE_FILE = TEMPLATES_DIR / "template_cuisine.html"
-
 
 # =========================
 # OpenAI client
@@ -23,10 +23,8 @@ if not api_key:
 client = OpenAI(api_key=api_key)
 
 
-
-
 def generate_recette_via_ai():
-    """Génère une recette asiatique simple en JSON et l'extrait proprement (même si l'IA ajoute du texte autour)."""
+    """Génère une recette asiatique simple en JSON structuré."""
     prompt = """
     Génère une recette asiatique simple en français, sous format JSON structuré avec les clés EXACTES :
     {
@@ -52,12 +50,10 @@ def generate_recette_via_ai():
         max_output_tokens=800,
     )
 
-    import json, re
     raw = (resp.output_text or "").strip()
     if not raw:
         raise ValueError("Réponse vide de l'IA")
 
-    # Extrait strictement le bloc JSON (entre la 1re { et la dernière })
     m = re.search(r"\{.*\}", raw, flags=re.S)
     if not m:
         raise ValueError(f"Aucun JSON trouvé dans la réponse: {raw[:200]}")
@@ -68,7 +64,7 @@ def generate_recette_via_ai():
     except json.JSONDecodeError as e:
         raise ValueError(f"JSON invalide: {e}\n---\n{json_str[:500]}")
 
-    # Contrôle de schéma minimal
+    # Vérifications minimales
     required = ["titre","description","duree_preparation","duree_preparation_iso","etapes","ingredients","astuce","conseils"]
     for k in required:
         if k not in data:
@@ -86,7 +82,7 @@ def generate_image(titre):
     response = client.images.generate(
         model="gpt-image-1",
         prompt=prompt,
-        size="1024x1024"  # format standard supporté
+        size="1024x1024"  # format accepté
     )
     b64 = response.data[0].b64_json
     img_bytes = base64.b64decode(b64)
@@ -98,7 +94,6 @@ def generate_image(titre):
         f.write(img_bytes)
 
     return f"images/{filename}"
-
 
 
 def generate_html_from_template(data: dict, image_path: str) -> str:
@@ -145,24 +140,32 @@ def save_article(html: str, titre: str):
 
 
 def update_index(titre, desc, image, article_file):
-    """Met à jour l’index.html pour ajouter la nouvelle recette en vignette."""
+    """Ajoute la dernière recette en haut de la grille dans index.html."""
+    from datetime import datetime
+    date_str = datetime.now().strftime("%d/%m/%Y")
+
     with open(INDEX_FILE, "r", encoding="utf-8") as f:
         index_content = f.read()
 
     card_html = f"""
-    <article class="card">
-      <a href="articles/{os.path.basename(article_file)}">
-        <img src="{image}" alt="{titre}" />
-        <h2>{titre}</h2>
-        <p>{desc}</p>
-      </a>
-    </article>
-    """
+  <a class="card" href="/articles/{os.path.basename(article_file)}">
+    <figure>
+      <img src="/{image.lstrip('/')}" alt="{titre}" loading="lazy" />
+      <figcaption>
+        <div class="title">{titre}</div>
+        <div class="date">{date_str}</div>
+      </figcaption>
+    </figure>
+  </a>""".rstrip()
 
     if "<!--RECIPES-->" in index_content:
-        index_content = index_content.replace("<!--RECIPES-->", card_html + "\n<!--RECIPES-->")
+        index_content = index_content.replace("<!--RECIPES-->", f"<!--RECIPES-->\n{card_html}\n", 1)
     else:
-        index_content += "\n" + card_html
+        index_content = index_content.replace(
+            '<div class="grid" id="grid">',
+            f'<div class="grid" id="grid">\n<!--RECIPES-->\n{card_html}',
+            1
+        )
 
     with open(INDEX_FILE, "w", encoding="utf-8") as f:
         f.write(index_content)
