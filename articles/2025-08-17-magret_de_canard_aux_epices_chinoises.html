@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magret de canard aux épices chinoises — Recette</title>
+  <meta name="description" content="Un plat savoureux et parfumé, mêlant le goût riche du magret de canard à des épices typiques de la cuisine chinoise, facile à préparer à la maison." />
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#0b1223;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#22d3ee;
+      --accent-2:#a78bfa;
+      --ring:#38bdf8;
+      --radius:18px;
+      --shadow-lg:0 20px 40px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif; color:var(--text); background:linear-gradient(135deg,#0b1223, var(--bg));}
+
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(160%) blur(10px);
+      background:linear-gradient(180deg, rgba(2,6,23,.78), rgba(2,6,23,.35)); border-bottom:1px solid rgba(148,163,184,.15)}
+    .wrap{max-width:1024px; margin-inline:auto; padding:16px 20px}
+    .row{display:flex; align-items:center; gap:10px; justify-content:space-between}
+    .breadcrumb{display:flex; align-items:center; gap:8px; color:var(--muted); text-decoration:none}
+    .breadcrumb:hover{color:var(--text)}
+    .actions{display:flex; gap:8px}
+    .btn{appearance:none; border:1px solid rgba(148,163,184,.18); color:var(--text); background:linear-gradient(180deg,#0b1223,#0f172a); padding:8px 12px; border-radius:12px; cursor:pointer; font-weight:500}
+    .btn:hover{border-color:rgba(56,189,248,.45)}
+    .btn:focus-visible{outline:none; box-shadow:0 0 0 3px var(--ring)}
+
+    .hero{position:relative}
+    .hero .imgwrap{position:relative; border-radius:22px; overflow:hidden; border:1px solid rgba(148,163,184,.15); box-shadow:var(--shadow-lg)}
+    .hero img{width:100%; height:360px; object-fit:cover; display:block; background:#111}
+    .hero .overlay{position:absolute; inset:0; background:linear-gradient(180deg, transparent 20%, rgba(2,6,23,.65) 75%, rgba(2,6,23,.9) 100%)}
+    .hero .title{position:absolute; left:22px; bottom:20px; right:22px; display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px}
+    h1{margin:0; font-size:clamp(22px,4.2vw,40px); letter-spacing:.2px}
+    .badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:600; color:#e0fbff}
+
+    .content{display:grid; grid-template-columns: 1fr 300px; gap:22px; margin-top:24px}
+    @media (max-width: 980px){ .content{grid-template-columns: 1fr} }
+
+    .card{background:linear-gradient(135deg,#0b1223,var(--card)); border:1px solid rgba(148,163,184,.15); border-radius:var(--radius); padding:18px}
+
+    .steps{counter-reset: step}
+    .step{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; padding:14px; border-radius:14px; border:1px solid rgba(148,163,184,.12); background:rgba(2,6,23,.35); margin-bottom:12px}
+    .step::before{counter-increment: step; content: counter(step); display:grid; place-items:center; width:34px; height:34px; border-radius:10px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:700}
+    .step p{margin:2px 0 0; line-height:1.55}
+
+    aside{position:sticky; top:86px; height:fit-content}
+    .aside-block{margin-bottom:16px}
+    .kpi{display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid rgba(148,163,184,.12); border-radius:14px; background:rgba(2,6,23,.35)}
+    .kpi strong{font-size:18px}
+
+    .muted{color:var(--muted)}
+    .tip{border-left:3px solid var(--accent); padding-left:12px}
+
+    @media print{
+      *{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .actions{ display:none !important; }
+      header, aside{ position: static !important; }
+      .hero .imgwrap{ box-shadow: none !important; }
+      .hero .overlay{ display:none !important; }
+      body{ background:#fff !important; color:#111 !important; }
+      .card{ background:#fff !important; border:1px solid #ddd !important; }
+      .step, .aside-block, .card{ page-break-inside: avoid; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row">
+        <a class="breadcrumb" href="/index.html" aria-label="Retour à l'accueil">← Accueil</a>
+        <div class="actions">
+          <button class="btn" id="copyBtn" title="Copier la recette">Copier</button>
+          <button class="btn" id="printBtn" title="Imprimer">Imprimer</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="imgwrap">
+        <img src="/images/2025-08-17-magret_de_canard_aux_epices_chinoises.jpg" alt="Magret de canard aux épices chinoises" />
+        <div class="overlay"></div>
+        <div class="title">
+          <h1>Magret de canard aux épices chinoises</h1>
+          <span class="badge" aria-label="Temps de préparation">⏱️ Préparation : 30 min</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <article class="card" aria-labelledby="etapes-title">
+        <h2 id="etapes-title">Étapes</h2>
+        <div class="steps" id="steps">
+          <div class="step"><p>Inciser la peau du magret de canard en croisillons sans couper la chair.</p></div>
+<div class="step"><p>Mélanger la poudre de cinq épices, le gingembre râpé, l'ail haché, la sauce soja et un peu de miel.</p></div>
+<div class="step"><p>Enduire le magret de cette marinade et laisser reposer 10 minutes.</p></div>
+<div class="step"><p>Faire chauffer une poêle à feu moyen, y déposer le magret côté peau et cuire 6-8 minutes jusqu’à ce que la peau soit bien dorée et croustillante.</p></div>
+<div class="step"><p>Retourner le magret et cuire encore 4-5 minutes selon la cuisson désirée.</p></div>
+<div class="step"><p>Retirer le magret, laisser reposer quelques minutes puis le trancher en fines lamelles.</p></div>
+<div class="step"><p>Servir chaud accompagné de riz vapeur et légumes sautés.</p></div>
+        </div>
+        <div class="card tip" style="margin-top:12px"><strong>Astuce :</strong> Pour une peau encore plus croustillante, commencer la cuisson à froid et monter la température progressivement.</div>
+      </article>
+
+      <aside>
+        <div class="aside-block kpi" aria-label="Temps de préparation">
+          <div>⏱️</div>
+          <div><div class="muted">Préparation</div><strong>30 min</strong></div>
+        </div>
+
+        <div class="aside-block card">
+          <h3>Ingrédients</h3>
+          <h4>Pour 2 personnes</h4>
+          <ul><li>1 magret de canard</li>
+<li>1 cuillère à café de poudre de cinq épices</li></ul>
+          <h4>Pour 3 personnes</h4>
+          <ul><li>1 cuillère à soupe de sauce soja</li>
+<li>1 cuillère à café de gingembre frais râpé</li></ul>
+          <h4>Pour 4 personnes</h4>
+          <ul><li>1 gousse d'ail hachée</li>
+<li>1 cuillère à café de miel</li></ul>
+        </div>
+
+        <div class="aside-block card">
+          <h3>Conseils</h3>
+          <ul>
+            <li>Ne pas piquer la peau du magret pour éviter que le gras ne s'échappe.</li>
+            <li>Laisser reposer la viande après cuisson pour une chair plus tendre et juteuse.</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+
+    document.getElementById('copyBtn')?.addEventListener('click', async () => {
+      const header = document.querySelector('header')?.cloneNode(true);
+      const main = document.querySelector('main')?.cloneNode(true);
+      header?.querySelector('.actions')?.remove();
+      main?.querySelectorAll('.overlay').forEach(el => el.remove());
+      const docFrag = `<article>${header ? header.outerHTML : ''}${main ? main.outerHTML : ''}</article>`.trim();
+      const plain = (() => {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = docFrag;
+        tmp.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+        return tmp.innerText.replace(/\n{3,}/g, '\n\n').trim();
+      })();
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          const item = new ClipboardItem({
+            'text/html': new Blob([docFrag], { type: 'text/html' }),
+            'text/plain': new Blob([plain], { type: 'text/plain' })
+          });
+          await navigator.clipboard.write([item]);
+        } else {
+          await navigator.clipboard.writeText(plain);
+        }
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copié !';
+        setTimeout(()=> btn.textContent = 'Copier', 1200);
+      } catch (err){
+        alert("Impossible de copier automatiquement.");
+      }
+    });
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Recipe",
+      "name": "Magret de canard aux épices chinoises",
+      "description": "Un plat savoureux et parfumé, mêlant le goût riche du magret de canard à des épices typiques de la cuisine chinoise, facile à préparer à la maison.",
+      "prepTime": "PT30M",
+      "recipeCategory": "Plat principal",
+      "recipeCuisine": "Asiatique",
+      "image": ["/images/2025-08-17-magret_de_canard_aux_epices_chinoises.jpg"],
+      "recipeInstructions": [
+        {"@type":"HowToStep","text":"Inciser la peau du magret de canard en croisillons sans couper la chair."},
+        {"@type":"HowToStep","text":"Mélanger la poudre de cinq épices, le gingembre râpé, l'ail haché, la sauce soja et un peu de miel."},
+        {"@type":"HowToStep","text":"Enduire le magret de cette marinade et laisser reposer 10 minutes."},
+        {"@type":"HowToStep","text":"Faire chauffer une poêle à feu moyen, y déposer le magret côté peau et cuire 6-8 minutes jusqu’à ce que la peau soit bien dorée et croustillante."},
+        {"@type":"HowToStep","text":"Retourner le magret et cuire encore 4-5 minutes selon la cuisson désirée."},
+        {"@type":"HowToStep","text":"Retirer le magret, laisser reposer quelques minutes puis le trancher en fines lamelles."},
+        {"@type":"HowToStep","text":"Servir chaud accompagné de riz vapeur et légumes sautés."}
+      ]
+    }
+  </script>
+</body>
+</html>
