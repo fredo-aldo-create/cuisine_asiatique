@@ -26,6 +26,9 @@ if not api_key:
     raise SystemExit("❌ Erreur : OPENAI_API_KEY manquant (ajoute-le dans GitHub > Settings > Secrets and variables > Actions).")
 client = OpenAI(api_key=api_key)
 
+# =========================
+# Utils
+# =========================
 def slugify(s: str) -> str:
     """ASCII, minuscules, remplace tout ce qui n'est pas [a-z0-9] par _"""
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
@@ -33,60 +36,123 @@ def slugify(s: str) -> str:
     s = re.sub(r"[^a-z0-9]+", "_", s).strip("_")
     return s
 
-def generate_recette_via_ai():
-    """Génère une recette asiatique simple en JSON structuré."""
-    prompt = """
-    Génère une recette asiatique simple en français, sous format JSON structuré avec les clés EXACTES :
-    {
-      "titre": "...",
-      "description": "...",
-      "duree_preparation": "... (ex: 25 min)",
-      "duree_preparation_iso": "... (ex: PT25M)",
-      "etapes": ["...", "...", "..."],
-      "ingredients": {
-        "2": ["...", "..."],
-        "3": ["...", "..."],
-        "4": ["...", "..."]
-      },
-      "astuce": "...",
-      "conseils": ["...", "..."]
+def existing_article_slugs() -> set:
+    """Liste des slugs (partie après la date) déjà publiés dans /articles."""
+    slugs = set()
+    for p in ARTICLES_DIR.glob("*.html"):
+        stem = p.stem  # ex: 2025-08-17-nouilles_sautees_au_poulet
+        if "-" in stem:
+            try:
+                slugs.add(stem.split("-", 1)[1])  # garde la partie après la date
+            except Exception:
+                pass
+    return slugs
+
+def theme_of_the_day() -> str:
+    """Thème (ingrédient/style) qui varie chaque jour pour forcer la diversité."""
+    themes = [
+        "poulet", "boeuf", "porc", "tofu végétarien", "crevettes",
+        "canard", "nouilles", "riz", "soupe", "curry",
+        "salade", "dessert asiatique", "poisson", "agneau",
+        "dim sum", "wok express", "street food asiatique", "vietnamien",
+        "thaï", "coréen", "japonais", "indien", "malaisien", "indonésien", "chinois"
+    ]
+    idx = datetime.now().toordinal() % len(themes)
+    return themes[idx]
+
+# =========================
+# Génération IA
+# =========================
+def generate_recette_via_ai() -> dict:
+    """Génère une recette asiatique en JSON structuré, en évitant les doublons."""
+    banned = sorted(existing_article_slugs())
+    theme = theme_of_the_day()
+
+    base_prompt = f"""
+Tu es un chef asiatique. Thème du jour : "{theme}".
+
+Interdictions importantes :
+- Ne propose PAS une recette dont le titre (après slugification ASCII) correspond à l'un des slugs suivants :
+{", ".join(banned) if banned else "(aucun)"}
+
+Objectif :
+Génère UNE recette asiatique simple en français, au format JSON EXACT ci-dessous (aucun texte avant/après) :
+
+{{
+  "titre": "...",
+  "description": "...",
+  "duree_preparation": "... (ex: 25 min)",
+  "duree_preparation_iso": "... (ex: PT25M)",
+  "etapes": ["...", "...", "..."],
+  "ingredients": {{
+    "2": ["...", "..."],
+    "3": ["...", "..."],
+    "4": ["...", "..."]
+  }},
+  "astuce": "...",
+  "conseils": ["...", "..."]
+}}
+
+Contraintes :
+- Le titre doit être distinct des slugs listés et cohérent avec le thème.
+- Si le thème est un ingrédient (poulet, tofu, crevettes...), le plat doit le contenir.
+- Utilise un vrai plat identifiable (pays/style d'Asie).
+- Donne UNIQUEMENT le JSON valide.
+"""
+
+    last_data = None
+    for attempt in range(4):
+        resp = client.responses.create(
+            model="gpt-4.1-mini",
+            input=base_prompt,
+            temperature=0.95,          # plus de variété
+            max_output_tokens=900,
+        )
+        raw = (resp.output_text or "").strip()
+        m = re.search(r"\{.*\}", raw, flags=re.S)
+        if not m:
+            # Renforce la contrainte et retente
+            base_prompt += "\nLe JSON n'a pas été détecté. Renvoie UNIQUEMENT le JSON.\n"
+            continue
+
+        try:
+            data = json.loads(m.group(0))
+            last_data = data
+        except json.JSONDecodeError:
+            base_prompt += "\nLe JSON était invalide. Renvoie un JSON strictement valide.\n"
+            continue
+
+        # validations minimales
+        required = ["titre","description","duree_preparation","duree_preparation_iso","etapes","ingredients","astuce","conseils"]
+        if any(k not in data for k in required):
+            base_prompt += "\nDes clés manquent. Renvoie le JSON complet avec toutes les clés requises.\n"
+            continue
+
+        slug = slugify(data["titre"])
+        if slug not in banned:
+            return data  # ✅ différent
+
+        # sinon, on indique explicitement le conflit et on retente
+        base_prompt += f"\nATTENTION : Le slug '{slug}' existe déjà. Propose un autre plat au même thème.\n"
+
+    # Ultime fallback (mieux que rien)
+    return last_data if last_data else {
+        "titre": "Nouilles sautées au wok (variante)",
+        "description": "Recette simple au wok, inspirée d'Asie.",
+        "duree_preparation": "20 min",
+        "duree_preparation_iso": "PT20M",
+        "etapes": ["Préparer les ingrédients", "Saisir au wok", "Assaisonner et servir"],
+        "ingredients": {"2": [], "3": [], "4": []},
+        "astuce": "Bien chauffer le wok.",
+        "conseils": ["Ne pas surcharger", "Servir aussitôt"]
     }
-    Donne UNIQUEMENT le JSON valide (aucun texte avant/après).
-    """
-    resp = client.responses.create(
-        model="gpt-4.1-mini",
-        input=prompt,
-        temperature=0.7,
-        max_output_tokens=800,
-    )
 
-    raw = (resp.output_text or "").strip()
-    if not raw:
-        raise ValueError("Réponse vide de l'IA")
-
-    m = re.search(r"\{.*\}", raw, flags=re.S)
-    if not m:
-        raise ValueError(f"Aucun JSON trouvé dans la réponse: {raw[:200]}")
-    json_str = m.group(0)
-
-    try:
-        data = json.loads(json_str)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"JSON invalide: {e}\n---\n{json_str[:500]}")
-
-    required = ["titre","description","duree_preparation","duree_preparation_iso","etapes","ingredients","astuce","conseils"]
-    for k in required:
-        if k not in data:
-            raise ValueError(f"Clé manquante dans le JSON: {k}")
-    for ppl in ["2","3","4"]:
-        if ppl not in data["ingredients"]:
-            raise ValueError(f"Ingrédients manquants pour {ppl} personnes")
-
-    return data
-
-def generate_image(titre):
+def generate_image(titre: str) -> str:
     """Génère une image réaliste de la recette avec couverts + baguettes."""
-    prompt = f"Photo réaliste d'un plat asiatique : {titre}, servi dans une belle assiette, avec des baguettes élégantes et des couverts modernes, style photo culinaire professionnelle."
+    prompt = (
+        f"Photo réaliste d'un plat asiatique : {titre}, servi dans une belle assiette, "
+        f"avec des baguettes élégantes et des couverts modernes, style photo culinaire professionnelle."
+    )
     response = client.images.generate(
         model="gpt-image-1",
         prompt=prompt,
@@ -136,7 +202,7 @@ def generate_html_from_template(data: dict, image_path: str) -> str:
 
     return html
 
-def save_article(html: str, titre: str):
+def save_article(html: str, titre: str) -> Path:
     today = date.today().isoformat()
     filename = f"{today}-{slugify(titre)}.html"
     filepath = ARTICLES_DIR / filename
@@ -158,7 +224,7 @@ def _make_excerpt(desc: str, max_len=160, min_len=150) -> str:
     return txt[:cut].strip()
 
 # ============ Index update ============
-def update_index(titre, desc, image, article_file):
+def update_index(titre: str, desc: str, image: str, article_file: Path) -> None:
     """Injecte une carte dans le bloc FEED sans écraser l’existant."""
     date_str = datetime.now().strftime("%d/%m/%Y")
 
@@ -180,6 +246,7 @@ def update_index(titre, desc, image, article_file):
         pos = m.end()
         idx_html = idx_html[:pos] + "\n<!-- FEED:start -->\n<!-- FEED:end -->\n" + idx_html[pos:]
 
+    # Carte
     card_html = f"""
           <!-- card-{os.path.splitext(os.path.basename(article_file))[0]} -->
           <article class="card">
@@ -197,8 +264,8 @@ def update_index(titre, desc, image, article_file):
             </div>
           </article>""".rstrip()
 
+    # Injection + déduplication par href
     def inject(feed_block: str) -> str:
-        # Déduplication par href
         feed_block = re.sub(
             rf'\s*<!-- card-[^-]+? -->\s*<article class="card">[\s\S]*?href="{re.escape(href)}"[\s\S]*?</article>',
             "", feed_block, flags=re.I
@@ -216,8 +283,15 @@ def update_index(titre, desc, image, article_file):
     with open(INDEX_FILE, "w", encoding="utf-8") as f:
         f.write(idx_html)
 
+# =========================
+# Main
+# =========================
 def main():
+    print("🎯 Thème du jour :", theme_of_the_day())
     data = generate_recette_via_ai()
+    if not data:
+        raise SystemExit("❌ Impossible de générer la recette.")
+
     image_path = generate_image(data["titre"])
     html = generate_html_from_template(data, image_path)
     article_file = save_article(html, data["titre"])
