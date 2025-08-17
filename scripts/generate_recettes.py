@@ -87,7 +87,7 @@ def generate_image(titre):
     b64 = response.data[0].b64_json
     img_bytes = base64.b64decode(b64)
 
-    today = datetime.date.today().isoformat()
+   today = date.today().isoformat()
     filename = f"{today}-{titre.replace(' ', '_')}.jpg"
     filepath = IMAGES_DIR / filename
     with open(filepath, "wb") as f:
@@ -158,6 +158,7 @@ def _make_excerpt(desc: str, max_len=160, min_len=150) -> str:
 def update_index(titre, desc, image, article_file):
     """Injecte une carte au format INFO-RÉVEIL entre <!-- FEED:start --> et <!-- FEED:end -->, en haut, sans écraser l’existant."""
     date_str = datetime.now().strftime("%d/%m/%Y")
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S +0000")
 
     href = f"articles/{os.path.basename(article_file)}"
     img_src = image.lstrip("/")
