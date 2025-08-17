@@ -66,11 +66,25 @@
 
     /* Print */
     @media print{
-      header, .actions, aside{display:none}
-      body{background:#fff; color:#111}
-      .card{border:none}
-      .hero .imgwrap{box-shadow:none}
-    }
+  /* Fidélité des couleurs / fonds */
+  *{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Ne PAS cacher l'aside ; on retire les éléments d'action uniquement */
+  .actions{ display:none !important; }
+
+  /* Éviter les découpes dues au sticky / ombres */
+  header, aside{ position: static !important; }
+  .hero .imgwrap{ box-shadow: none !important; }
+  .hero .overlay{ display:none !important; }
+
+  /* Fond clair pour économiser l’encre */
+  body{ background:#fff !important; color:#111 !important; }
+  .card{ background:#fff !important; border:1px solid #ddd !important; }
+
+  /* Éviter les sauts de page au milieu d’un bloc */
+  .step, .aside-block, .card{ page-break-inside: avoid; break-inside: avoid; }
+}
+
   </style>
 </head>
 <body>
@@ -158,22 +172,64 @@
     </section>
   </main>
 
-  <script>
-    // Impression
-    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+ <script>
+  // Impression
+  document.getElementById('printBtn')?.addEventListener('click', () => window.print());
 
-    // Copier la recette (titre + étapes)
-    document.getElementById('copyBtn')?.addEventListener('click', () => {
-      const title = document.querySelector('h1')?.textContent?.trim() || '';
-      const steps = Array.from(document.querySelectorAll('.step p')).map((p,i) => `${i+1}. ${p.textContent?.trim()}`).join('\n');
-      const text = `${title}\n\nÉtapes\n${steps}`;
-      navigator.clipboard.writeText(text).then(() => {
+  // Copier toute la page (contenu utile)
+  document.getElementById('copyBtn')?.addEventListener('click', async () => {
+    // Cloner les zones utiles
+    const header = document.querySelector('header')?.cloneNode(true);
+    const main = document.querySelector('main')?.cloneNode(true);
+
+    // Nettoyages : retirer les boutons/actions et overlays purement décoratives
+    header?.querySelector('.actions')?.remove();
+    main?.querySelectorAll('.overlay').forEach(el => el.remove());
+
+    // Construire un fragment HTML minimal
+    const docFrag = `
+      <article>
+        ${header ? header.outerHTML : ''}
+        ${main ? main.outerHTML : ''}
+      </article>
+    `.trim();
+
+    // Version texte lisible (fallback)
+    const plain = (() => {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = docFrag;
+      // Retirer les éléments non pertinents résiduels
+      tmp.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+      return tmp.innerText.replace(/\n{3,}/g, '\n\n').trim();
+    })();
+
+    // Tentative de copie riche (HTML + texte), avec fallback texte
+    try {
+      if (navigator.clipboard && window.ClipboardItem) {
+        const item = new ClipboardItem({
+          'text/html': new Blob([docFrag], { type: 'text/html' }),
+          'text/plain': new Blob([plain], { type: 'text/plain' })
+        });
+        await navigator.clipboard.write([item]);
+      } else {
+        await navigator.clipboard.writeText(plain);
+      }
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = 'Copié !';
+      setTimeout(()=> btn.textContent = 'Copier', 1200);
+    } catch (e) {
+      // Dernier recours
+      try {
+        await navigator.clipboard.writeText(plain);
         const btn = document.getElementById('copyBtn');
-        btn.textContent = 'Copié !';
+        btn.textContent = 'Copié (texte) !';
         setTimeout(()=> btn.textContent = 'Copier', 1200);
-      });
-    });
-  </script>
+      } catch (err){
+        alert("Impossible de copier automatiquement. Sélectionnez la page et faites Ctrl+C.");
+      }
+    }
+  });
+</script>
 
   <!-- Données structurées Schema.org pour SEO -->
   <script type="application/ld+json">
