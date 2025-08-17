@@ -99,10 +99,7 @@
       <article class="card" aria-labelledby="etapes-title">
         <h2 id="etapes-title">Étapes</h2>
         <div class="steps" id="steps">
-          <div class="step"><p>{{ETAPE_1}}</p></div>
-          <div class="step"><p>{{ETAPE_2}}</p></div>
-          <div class="step"><p>{{ETAPE_3}}</p></div>
-          <!-- Ajoutez autant d'étapes que nécessaire -->
+          {{ETAPES_HTML}}
         </div>
         <div class="card tip" style="margin-top:12px"><strong>Astuce :</strong> {{ASTUCE}}</div>
       </article>
@@ -116,17 +113,11 @@
         <div class="aside-block card">
           <h3>Ingrédients</h3>
           <h4>Pour 2 personnes</h4>
-          <ul>
-            <li>{{INGREDIENTS_2P}}</li>
-          </ul>
+          {{INGREDIENTS_2_HTML}}
           <h4>Pour 3 personnes</h4>
-          <ul>
-            <li>{{INGREDIENTS_3P}}</li>
-          </ul>
+          {{INGREDIENTS_3_HTML}}
           <h4>Pour 4 personnes</h4>
-          <ul>
-            <li>{{INGREDIENTS_4P}}</li>
-          </ul>
+          {{INGREDIENTS_4_HTML}}
         </div>
 
         <div class="aside-block card">
@@ -185,9 +176,7 @@
       "recipeCuisine": "Asiatique",
       "image": ["{{IMAGE_RECETTE}}"],
       "recipeInstructions": [
-        {"@type":"HowToStep","text":"{{ETAPE_1}}"},
-        {"@type":"HowToStep","text":"{{ETAPE_2}}"},
-        {"@type":"HowToStep","text":"{{ETAPE_3}}"}
+        {{SCHEMA_ETAPES_JSON}}
       ]
     }
   </script>
