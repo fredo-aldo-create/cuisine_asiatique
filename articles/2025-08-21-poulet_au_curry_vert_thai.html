@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Poulet au curry vert thaï — Recette</title>
+  <meta name="description" content="Un plat savoureux et parfumé de la cuisine thaïlandaise, combinant poulet tendre, lait de coco crémeux et curry vert relevé." />
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#0b1223;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --accent:#22d3ee;
+      --accent-2:#a78bfa;
+      --ring:#38bdf8;
+      --radius:18px;
+      --shadow-lg:0 20px 40px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Inter,Arial,sans-serif; color:var(--text); background:linear-gradient(135deg,#0b1223, var(--bg));}
+
+    header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(160%) blur(10px);
+      background:linear-gradient(180deg, rgba(2,6,23,.78), rgba(2,6,23,.35)); border-bottom:1px solid rgba(148,163,184,.15)}
+    .wrap{max-width:1024px; margin-inline:auto; padding:16px 20px}
+    .row{display:flex; align-items:center; gap:10px; justify-content:space-between}
+    .breadcrumb{display:flex; align-items:center; gap:8px; color:var(--muted); text-decoration:none}
+    .breadcrumb:hover{color:var(--text)}
+    .actions{display:flex; gap:8px}
+    .btn{appearance:none; border:1px solid rgba(148,163,184,.18); color:var(--text); background:linear-gradient(180deg,#0b1223,#0f172a); padding:8px 12px; border-radius:12px; cursor:pointer; font-weight:500}
+    .btn:hover{border-color:rgba(56,189,248,.45)}
+    .btn:focus-visible{outline:none; box-shadow:0 0 0 3px var(--ring)}
+
+    .hero{position:relative}
+    .hero .imgwrap{position:relative; border-radius:22px; overflow:hidden; border:1px solid rgba(148,163,184,.15); box-shadow:var(--shadow-lg)}
+    .hero img{width:100%; height:360px; object-fit:cover; display:block; background:#111}
+    .hero .overlay{position:absolute; inset:0; background:linear-gradient(180deg, transparent 20%, rgba(2,6,23,.65) 75%, rgba(2,6,23,.9) 100%)}
+    .hero .title{position:absolute; left:22px; bottom:20px; right:22px; display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px}
+    h1{margin:0; font-size:clamp(22px,4.2vw,40px); letter-spacing:.2px}
+    .badge{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:600; color:#e0fbff}
+
+    .content{display:grid; grid-template-columns: 1fr 300px; gap:22px; margin-top:24px}
+    @media (max-width: 980px){ .content{grid-template-columns: 1fr} }
+
+    .card{background:linear-gradient(135deg,#0b1223,var(--card)); border:1px solid rgba(148,163,184,.15); border-radius:var(--radius); padding:18px}
+
+    .steps{counter-reset: step}
+    .step{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:start; padding:14px; border-radius:14px; border:1px solid rgba(148,163,184,.12); background:rgba(2,6,23,.35); margin-bottom:12px}
+    .step::before{counter-increment: step; content: counter(step); display:grid; place-items:center; width:34px; height:34px; border-radius:10px; background:rgba(34,211,238,.15); border:1px solid rgba(56,189,248,.45); font-weight:700}
+    .step p{margin:2px 0 0; line-height:1.55}
+
+    aside{position:sticky; top:86px; height:fit-content}
+    .aside-block{margin-bottom:16px}
+    .kpi{display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid rgba(148,163,184,.12); border-radius:14px; background:rgba(2,6,23,.35)}
+    .kpi strong{font-size:18px}
+
+    .muted{color:var(--muted)}
+    .tip{border-left:3px solid var(--accent); padding-left:12px}
+
+    @media print{
+      *{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .actions{ display:none !important; }
+      header, aside{ position: static !important; }
+      .hero .imgwrap{ box-shadow: none !important; }
+      .hero .overlay{ display:none !important; }
+      body{ background:#fff !important; color:#111 !important; }
+      .card{ background:#fff !important; border:1px solid #ddd !important; }
+      .step, .aside-block, .card{ page-break-inside: avoid; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="row">
+        <a class="breadcrumb" href="/index.html" aria-label="Retour à l'accueil">← Accueil</a>
+        <div class="actions">
+          <button class="btn" id="copyBtn" title="Copier la recette">Copier</button>
+          <button class="btn" id="printBtn" title="Imprimer">Imprimer</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="imgwrap">
+        <img src="/images/2025-08-21-poulet_au_curry_vert_thai.jpg" alt="Poulet au curry vert thaï" />
+        <div class="overlay"></div>
+        <div class="title">
+          <h1>Poulet au curry vert thaï</h1>
+          <span class="badge" aria-label="Temps de préparation">⏱️ Préparation : 30 min</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="content">
+      <article class="card" aria-labelledby="etapes-title">
+        <h2 id="etapes-title">Étapes</h2>
+        <div class="steps" id="steps">
+          <div class="step"><p>Coupez le poulet en morceaux de taille moyenne.</p></div>
+<div class="step"><p>Faites revenir la pâte de curry vert dans un wok avec un peu d'huile jusqu'à ce qu'elle dégage ses arômes.</p></div>
+<div class="step"><p>Ajoutez le poulet et faites-le dorer de tous côtés.</p></div>
+<div class="step"><p>Versez le lait de coco, puis ajoutez les légumes (aubergines thaï, poivrons, haricots verts).</p></div>
+<div class="step"><p>Laissez mijoter à feu doux pendant 15 minutes jusqu'à cuisson complète.</p></div>
+<div class="step"><p>Incorporez le basilic thaï et assaisonnez avec la sauce poisson et un peu de sucre.</p></div>
+<div class="step"><p>Servez chaud accompagné de riz jasmin.</p></div>
+        </div>
+        <div class="card tip" style="margin-top:12px"><strong>Astuce :</strong> Pour un goût encore plus authentique, utilisez des feuilles de kaffir et du galanga frais, que vous ajoutez en début de cuisson puis retirez avant de servir.</div>
+      </article>
+
+      <aside>
+        <div class="aside-block kpi" aria-label="Temps de préparation">
+          <div>⏱️</div>
+          <div><div class="muted">Préparation</div><strong>30 min</strong></div>
+        </div>
+
+        <div class="aside-block card">
+          <h3>Ingrédients</h3>
+          <h4>Pour 2 personnes</h4>
+          <ul><li>300 g — Poulet (blanc ou cuisse désossée)</li>
+<li>200 ml — Lait de coco</li>
+<li>30 g — Pâte de curry vert</li>
+<li>100 g — Aubergines thaï</li>
+<li>100 g — Poivron rouge</li>
+<li>80 g — Haricots verts</li>
+<li>10 g — Basilic thaï frais</li>
+<li>20 ml — Sauce poisson</li>
+<li>5 g — Sucre</li>
+<li>150 g — Riz jasmin</li></ul>
+          <h4>Pour 3 personnes</h4>
+          <ul><li>450 g — Poulet (blanc ou cuisse désossée)</li>
+<li>300 ml — Lait de coco</li>
+<li>45 g — Pâte de curry vert</li>
+<li>150 g — Aubergines thaï</li>
+<li>150 g — Poivron rouge</li>
+<li>120 g — Haricots verts</li>
+<li>15 g — Basilic thaï frais</li>
+<li>30 ml — Sauce poisson</li>
+<li>7 g — Sucre</li>
+<li>225 g — Riz jasmin</li></ul>
+          <h4>Pour 4 personnes</h4>
+          <ul><li>600 g — Poulet (blanc ou cuisse désossée)</li>
+<li>400 ml — Lait de coco</li>
+<li>60 g — Pâte de curry vert</li>
+<li>200 g — Aubergines thaï</li>
+<li>200 g — Poivron rouge</li>
+<li>160 g — Haricots verts</li>
+<li>20 g — Basilic thaï frais</li>
+<li>40 ml — Sauce poisson</li>
+<li>10 g — Sucre</li>
+<li>300 g — Riz jasmin</li></ul>
+        </div>
+
+        <div class="aside-block card">
+          <h3>Conseils</h3>
+          <ul>
+            <li>Ne faites pas cuire le poulet trop longtemps pour qu'il reste tendre.</li>
+            <li>Servez avec un riz jasmin bien parfumé pour équilibrer le piquant du curry.</li>
+          </ul>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+
+    document.getElementById('copyBtn')?.addEventListener('click', async () => {
+      const header = document.querySelector('header')?.cloneNode(true);
+      const main = document.querySelector('main')?.cloneNode(true);
+      header?.querySelector('.actions')?.remove();
+      main?.querySelectorAll('.overlay').forEach(el => el.remove());
+      const docFrag = `<article>${header ? header.outerHTML : ''}${main ? main.outerHTML : ''}</article>`.trim();
+      const plain = (() => {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = docFrag;
+        tmp.querySelectorAll('script, style, noscript').forEach(el => el.remove());
+        return tmp.innerText.replace(/\n{3,}/g, '\n\n').trim();
+      })();
+      try {
+        if (navigator.clipboard && window.ClipboardItem) {
+          const item = new ClipboardItem({
+            'text/html': new Blob([docFrag], { type: 'text/html' }),
+            'text/plain': new Blob([plain], { type: 'text/plain' })
+          });
+          await navigator.clipboard.write([item]);
+        } else {
+          await navigator.clipboard.writeText(plain);
+        }
+        const btn = document.getElementById('copyBtn');
+        btn.textContent = 'Copié !';
+        setTimeout(()=> btn.textContent = 'Copier', 1200);
+      } catch (err){
+        alert("Impossible de copier automatiquement.");
+      }
+    });
+  </script>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Recipe",
+      "name": "Poulet au curry vert thaï",
+      "description": "Un plat savoureux et parfumé de la cuisine thaïlandaise, combinant poulet tendre, lait de coco crémeux et curry vert relevé.",
+      "prepTime": "PT30M",
+      "recipeCategory": "Plat principal",
+      "recipeCuisine": "Asiatique",
+      "image": ["/images/2025-08-21-poulet_au_curry_vert_thai.jpg"],
+      "recipeInstructions": [
+        {"@type":"HowToStep","text":"Coupez le poulet en morceaux de taille moyenne."},
+        {"@type":"HowToStep","text":"Faites revenir la pâte de curry vert dans un wok avec un peu d'huile jusqu'à ce qu'elle dégage ses arômes."},
+        {"@type":"HowToStep","text":"Ajoutez le poulet et faites-le dorer de tous côtés."},
+        {"@type":"HowToStep","text":"Versez le lait de coco, puis ajoutez les légumes (aubergines thaï, poivrons, haricots verts)."},
+        {"@type":"HowToStep","text":"Laissez mijoter à feu doux pendant 15 minutes jusqu'à cuisson complète."},
+        {"@type":"HowToStep","text":"Incorporez le basilic thaï et assaisonnez avec la sauce poisson et un peu de sucre."},
+        {"@type":"HowToStep","text":"Servez chaud accompagné de riz jasmin."}
+      ]
+    }
+  </script>
+</body>
+</html>
